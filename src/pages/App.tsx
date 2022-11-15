@@ -6,10 +6,10 @@ import Polling from '../components/essential/Polling'
 import Popups from '../components/essential/Popups'
 import Web3ReactManager from '../components/essential/Web3ReactManager'
 import WarningModal from '../components/Modal/WarningModal'
-import ComingSoon from './ComingSoon'
 import { ModalProvider } from 'context/ModalContext'
-import Footer from 'components/Footer'
 import FBT from '../pages/ftb'
+import Footer from './Footer'
+import Function from './func'
 
 const AppWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -33,15 +33,13 @@ const BodyWrapper = styled('div')(({ theme }) => ({
   flexDirection: 'column',
   width: '100%',
   minHeight: `calc(100vh - ${theme.height.header} - ${theme.height.footer})`,
-  padding: '50px 0 80px',
   alignItems: 'center',
   flex: 1,
   overflowY: 'auto',
   overflowX: 'hidden',
   position: 'relative',
   [theme.breakpoints.down('md')]: {
-    minHeight: `calc(100vh - ${theme.height.header} - ${theme.height.mobileHeader})`,
-    paddingTop: 20
+    minHeight: `calc(100vh - ${theme.height.header} - ${theme.height.mobileHeader})`
   }
 }))
 
@@ -58,16 +56,15 @@ export default function App() {
               <WarningModal />
               <Web3ReactManager>
                 <Routes>
-                  <Route path="/test1" element={<ComingSoon />} />
-                  <Route path="/test2" element={<ComingSoon />} />
-                  <Route path="/fbt" element={<FBT />} />
+                  <Route path="/" element={<FBT />} />
+                  <Route path="/function" element={<Function />} />
                 </Routes>
               </Web3ReactManager>
             </BodyWrapper>
             <Footer />
           </ContentWrapper>
         </AppWrapper>
-      </ModalProvider>{' '}
+      </ModalProvider>
     </Suspense>
   )
 }
