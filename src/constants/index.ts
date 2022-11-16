@@ -110,3 +110,8 @@ export const BLOCKED_ADDRESSES: string[] = [
   '0xA7e5d5A720f06526557c513402f2e6B5fA20b008',
   '0x8576aCC5C05D6Ce88f4e49bf65BdF0C62F91353C'
 ]
+
+export const FTB_ADDRESS: { [chainId in ChainId]?: string } = {
+  [ChainId.BSC]: '',
+  [ChainId.BSCTEST]: '0x66E465e9D3bA3325C15967c7BB8F8570E1256C01'
+}

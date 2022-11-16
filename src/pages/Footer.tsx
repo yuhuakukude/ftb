@@ -22,6 +22,9 @@ export default function Footer() {
         justifyContent: 'space-between',
         width: '100%',
         height: 'auto',
+        position: 'relative',
+        left: '0',
+        bottom: '0',
         padding: '4px 40px',
         backgroundImage: `url(${FooterBg})`
       }}

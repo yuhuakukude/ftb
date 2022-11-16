@@ -12,6 +12,8 @@ import { useActiveWeb3React } from './index'
 import { ChainId } from '../constants/chain'
 import { getOtherNetworkLibrary } from 'connectors/MultiNetworkConnector'
 import ERC721_ABI from '../constants/abis/erc721.json'
+import FtbAbi from 'constants/abis/ftb.json'
+import { FTB_ADDRESS } from '../constants'
 
 // returns null on errors
 function useContract(
@@ -101,4 +103,9 @@ export function useSocksController(): Contract | null {
 
 export function useNFTContract(address: string | undefined): Contract | null {
   return useContract(address, ERC721_ABI, true)
+}
+
+export function useShibaContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId ? FTB_ADDRESS[chainId] : undefined, FtbAbi, true)
 }

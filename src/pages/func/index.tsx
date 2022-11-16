@@ -46,8 +46,6 @@ export default function Function() {
       sx={{
         width: '100%',
         minHeight: '100%',
-        backgroundImage: `url(${FuncBg})`,
-        backgroundSize: 'cover',
         padding: '8px 12px'
       }}
     >
@@ -61,34 +59,52 @@ export default function Function() {
         <GreenText>限时免费</GreenText>
         <GreenText
           sx={{
-            width: '100%'
+            width: '100%',
+            marginTop: '20px'
           }}
         >
           相同数量
         </GreenText>
-        <Box display={'flex'} justifyContent={'space-between'}>
+        <Box display={'flex'} justifyContent={'space-between'} marginTop={10}>
           <BuyBtn>批量转账(主网币)</BuyBtn>
           <BuyBtn>批量转账(代币)</BuyBtn>
         </Box>
         <GreenText
           sx={{
-            width: '100%'
+            width: '100%',
+            marginTop: '10px'
           }}
         >
           不同数量
         </GreenText>
-        <Box display={'flex'} justifyContent={'space-between'}>
+        <Box display={'flex'} justifyContent={'space-between'} marginTop={10}>
           <BuyBtn>批量转账(主网币)</BuyBtn>
           <BuyBtn>批量转账(代币)</BuyBtn>
         </Box>
       </Box>
 
-      <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
+      <Box
+        display={'flex'}
+        flexDirection={'column'}
+        alignItems={'center'}
+        sx={{
+          backgroundImage: `url(${FuncBg})`,
+          backgroundSize: 'cover',
+          padding: '10px'
+        }}
+      >
         <ImgWrapper src={FTBImg} />
         <Typography color={'white'}>代币总量:1000万</Typography>
         <ImgWrapper src={TitleImg} />
         <ImgWrapper src={RuleImg} />
-        <Typography>
+        <Typography
+          sx={{
+            backgroundColor: 'rgba(96,202,59,0.3)',
+            padding: '12px 6px',
+            marginTop: '10px',
+            color: 'white'
+          }}
+        >
           注意： 1.此代币前10天只能卖不能买，等到第11天开盘后开放交 易，参与者投资全部进流动池，螺旋上升机制。
           2.卖出30%（
         </Typography>

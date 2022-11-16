@@ -10,6 +10,8 @@ import { ModalProvider } from 'context/ModalContext'
 import FBT from '../pages/ftb'
 import Footer from './Footer'
 import Function from './func'
+import Mining from './mining'
+import baseBG from '../assets/images/base-bg.png'
 
 const AppWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -25,7 +27,10 @@ const ContentWrapper = styled('div')({
   width: '100%',
   maxHeight: '100vh',
   overflow: 'auto',
-  alignItems: 'center'
+  alignItems: 'center',
+  background: `url(${baseBG})`,
+  backgroundSize: '200%',
+  backgroundPosition: 'center'
 })
 
 const BodyWrapper = styled('div')(({ theme }) => ({
@@ -58,6 +63,7 @@ export default function App() {
                 <Routes>
                   <Route path="/" element={<FBT />} />
                   <Route path="/function" element={<Function />} />
+                  <Route path="/mining" element={<Mining />} />
                 </Routes>
               </Web3ReactManager>
             </BodyWrapper>

@@ -15,10 +15,11 @@ import useBreakpoint from 'hooks/useBreakpoint'
 const ActionButton = styled(Button)(({ theme }) => ({
   fontSize: '14px',
   marginBottom: 15,
+  backgroundColor: 'rgba(35,49,124,0.3)',
+  borderRadius: '30px',
   [theme.breakpoints.down('sm')]: {
     maxWidth: 320,
     width: '100%',
-    borderRadius: 49,
     marginBottom: 0
   }
 }))
@@ -59,11 +60,11 @@ function Web3StatusInner() {
           sx={{
             height: { xs: 24, sm: 36 },
             width: { xs: 100, sm: 180 },
-            borderRadius: '46px',
+            backgroundColor: 'rgba(35,49,124,0.3)',
+            borderRadius: '30px',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center',
-            backgroundColor: theme.palette.background.default
+            alignItems: 'center'
           }}
         >
           <div />

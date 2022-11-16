@@ -1,15 +1,12 @@
 import { Box, Stack, styled, Typography } from '@mui/material'
-import baseBG from '../assets/images/base-bg.png'
+import BgMedium from '../assets/images/background.png'
 
 export default function Page({ children }: { children: JSX.Element }) {
   return (
     <Box
       sx={{
         width: { xs: '100vw' },
-        padding: { xs: 20 },
-        background: `url(${baseBG})`,
-        backgroundSize: '200%',
-        backgroundPosition: 'center'
+        padding: '0 20px 20px 20px'
       }}
     >
       {children}
@@ -19,7 +16,16 @@ export default function Page({ children }: { children: JSX.Element }) {
 
 function ContentView({ children }: { children: JSX.Element }) {
   return (
-    <Stack sx={{ padding: '18px 15px', backgroundColor: 'rgba(15,15,49,0.650)' }} spacing={23}>
+    <Stack
+      sx={{
+        padding: '18px 15px',
+        width: '100%',
+        height: 'auto',
+        backgroundSize: 'cover',
+        backgroundImage: `url(${BgMedium})`
+      }}
+      spacing={23}
+    >
       {children}
     </Stack>
   )

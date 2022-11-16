@@ -1,38 +1,38 @@
 import Page, { ContentView, GreenText, RowBetween, SmallText } from '../../components/page'
 import homeBanner from '../../assets/images/home-banner.png'
 import Image from '../../components/Image'
-import Logo from 'assets/images/FTB.png'
 import BgShort from 'assets/images/background_short.png'
 import Arrow from 'assets/images/down_arrow.png'
 import TwitterLogo from 'assets/images/twitter.png'
 import TeleLogo from 'assets/images/telegram.png'
 import Brands from 'assets/images/brands.png'
-import { Box, Button, Stack, Typography } from '@mui/material'
-import Web3Status from '../../components/Header/Web3Status'
+import BgMedium from 'assets/images/background.png'
+import { Box, Stack, Typography } from '@mui/material'
+import {
+  useBaseAmount,
+  useCirculatingSupply,
+  useCount,
+  useEstimateRewards,
+  usePendingRewards,
+  useTotalStakedUsdt
+} from '../../hooks/useFtbHomepage'
 
 export default function FTB() {
+  const supply = useCirculatingSupply()
+  const stack = useTotalStakedUsdt()
+  const count = useCount()
+  const baseAmount = useBaseAmount()
+  const pendingReward = usePendingRewards()
+  const estimateReward = useEstimateRewards()
   return (
     <Page>
       <>
-        <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
-          <img src={Logo} style={{ width: '50px', height: '18px' }} />
-          <Box sx={{ display: 'flex' }}>
-            <Web3Status />
-            <Button
-              sx={{
-                backgroundColor: 'rgba(35,49,124,0.3)',
-                borderRadius: '30px',
-                color: '#FFFFFF',
-                height: '31px',
-                width: '52px',
-                fontSize: '12px'
-              }}
-            >
-              中文
-            </Button>
-          </Box>
-        </Box>
-        <Image style={{ width: '100%', marginTop: '16px' }} src={homeBanner} />
+        <Image
+          style={{
+            width: '100%'
+          }}
+          src={homeBanner}
+        />
         <ContentView>
           <>
             <RowBetween>
@@ -40,24 +40,24 @@ export default function FTB() {
               <GreenText>全网质押</GreenText>
             </RowBetween>
             <RowBetween>
-              <SmallText>000000</SmallText>
-              <SmallText>000000</SmallText>
+              <SmallText>{supply}</SmallText>
+              <SmallText>{stack}</SmallText>
             </RowBetween>
             <RowBetween>
               <GreenText>全网矿工</GreenText>
               <GreenText>基础产量</GreenText>
             </RowBetween>
             <RowBetween>
-              <SmallText>000000</SmallText>
-              <SmallText>000000</SmallText>
+              <SmallText>{count}</SmallText>
+              <SmallText>{baseAmount}</SmallText>
             </RowBetween>
             <RowBetween>
               <GreenText>我的资产</GreenText>
               <GreenText>我的产量</GreenText>
             </RowBetween>
             <RowBetween>
-              <SmallText>000000</SmallText>
-              <SmallText>000000</SmallText>
+              <SmallText>{pendingReward}</SmallText>
+              <SmallText>{estimateReward}</SmallText>
             </RowBetween>
           </>
         </ContentView>
@@ -68,6 +68,7 @@ export default function FTB() {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
+            justifyContent: 'space-between',
             width: '100%',
             height: '75px',
             backgroundSize: 'cover',
@@ -85,7 +86,9 @@ export default function FTB() {
             padding: '16px',
             borderRadius: '15px',
             backgroundColor: 'rgba(15,15,49,0.650)',
-            alignItems: 'center'
+            alignItems: 'center',
+            backgroundSize: 'cover',
+            backgroundImage: `url(${BgMedium})`
           }}
         >
           <GreenText>邀请信息</GreenText>
@@ -165,11 +168,15 @@ export default function FTB() {
           >
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Image src={TwitterLogo} style={{ width: '32px', height: '32px' }} />
-              <Typography color={'#FFFFFF'}>推特</Typography>
+              <Typography color={'#FFFFFF'} marginLeft={10}>
+                推特
+              </Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Image src={TeleLogo} style={{ width: '32px', height: '32px' }} />
-              <Typography color={'#FFFFFF'}>电报</Typography>
+              <Typography color={'#FFFFFF'} marginLeft={10}>
+                电报
+              </Typography>
             </Box>
           </Stack>
           <Image src={Brands} style={{ width: '280px', height: 'auto', marginTop: '16px' }} />
