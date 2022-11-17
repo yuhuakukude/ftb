@@ -3,6 +3,8 @@ import HomePageIcon from 'assets/images/football.png'
 import MiningIcon from 'assets/images/mining.png'
 import SettingIcon from 'assets/images/setting.png'
 import FooterBg from 'assets/images/solid_bg.png'
+import { NavLink } from 'react-router-dom'
+import { routes } from '../constants/routes'
 
 const ImageWrapper = styled('img')`
   width: 30px;
@@ -14,6 +16,10 @@ const TabText = styled(Typography)`
   font-size: 16px;
 `
 
+const Nav = styled(NavLink)`
+  text-decoration: none;
+`
+
 export default function Footer() {
   return (
     <Box
@@ -22,27 +28,33 @@ export default function Footer() {
         justifyContent: 'space-between',
         width: '100%',
         height: 'auto',
-        position: 'relative',
+        position: 'fixed',
         left: '0',
         bottom: '0',
         padding: '4px 40px',
         backgroundImage: `url(${FooterBg})`
       }}
     >
-      <Box>
-        <ImageWrapper src={HomePageIcon} />
-        <TabText>FTB</TabText>
-      </Box>
+      <Nav to={routes.ftb}>
+        <Box>
+          <ImageWrapper src={HomePageIcon} />
+          <TabText>FTB</TabText>
+        </Box>
+      </Nav>
 
-      <Box>
-        <ImageWrapper src={MiningIcon} />
-        <TabText>挖矿</TabText>
-      </Box>
+      <Nav to={routes.mining}>
+        <Box>
+          <ImageWrapper src={MiningIcon} />
+          <TabText>挖矿</TabText>
+        </Box>
+      </Nav>
 
-      <Box>
-        <ImageWrapper src={SettingIcon} />
-        <TabText>功能</TabText>
-      </Box>
+      <Nav to={routes.func}>
+        <Box>
+          <ImageWrapper src={SettingIcon} />
+          <TabText>功能</TabText>
+        </Box>
+      </Nav>
     </Box>
   )
 }

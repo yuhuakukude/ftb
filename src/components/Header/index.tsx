@@ -8,7 +8,7 @@ export default function Header() {
       sx={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between', padding: '16px' }}
     >
       <img src={Logo} style={{ width: '50px', height: '18px' }} />
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Web3Status />
         <Button
           sx={{

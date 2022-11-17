@@ -8,22 +8,15 @@ import TeleLogo from 'assets/images/telegram.png'
 import Brands from 'assets/images/brands.png'
 import BgMedium from 'assets/images/background.png'
 import { Box, Stack, Typography } from '@mui/material'
-import {
-  useBaseAmount,
-  useCirculatingSupply,
-  useCount,
-  useEstimateRewards,
-  usePendingRewards,
-  useTotalStakedUsdt
-} from '../../hooks/useFtbHomepage'
+import { useFtbInfo } from '../../hooks/useFtbHomepage'
+import { useActiveWeb3React } from '../../hooks'
+import { shortenText } from '../../utils'
+import useCopyClipboard from '../../hooks/useCopyClipboard'
 
 export default function FTB() {
-  const supply = useCirculatingSupply()
-  const stack = useTotalStakedUsdt()
-  const count = useCount()
-  const baseAmount = useBaseAmount()
-  const pendingReward = usePendingRewards()
-  const estimateReward = useEstimateRewards()
+  const { supply, staked, count, baseAmount, pendingRewards, estimateRewards } = useFtbInfo()
+  const { account } = useActiveWeb3React()
+  const [isCopied, setCopied] = useCopyClipboard()
   return (
     <Page>
       <>
@@ -41,7 +34,7 @@ export default function FTB() {
             </RowBetween>
             <RowBetween>
               <SmallText>{supply}</SmallText>
-              <SmallText>{stack}</SmallText>
+              <SmallText>{staked}</SmallText>
             </RowBetween>
             <RowBetween>
               <GreenText>全网矿工</GreenText>
@@ -49,15 +42,15 @@ export default function FTB() {
             </RowBetween>
             <RowBetween>
               <SmallText>{count}</SmallText>
-              <SmallText>{baseAmount}</SmallText>
+              <SmallText>{baseAmount}/天</SmallText>
             </RowBetween>
             <RowBetween>
               <GreenText>我的资产</GreenText>
               <GreenText>我的产量</GreenText>
             </RowBetween>
             <RowBetween>
-              <SmallText>{pendingReward}</SmallText>
-              <SmallText>{estimateReward}</SmallText>
+              <SmallText>{pendingRewards}</SmallText>
+              <SmallText>{estimateRewards}/天</SmallText>
             </RowBetween>
           </>
         </ContentView>
@@ -82,12 +75,15 @@ export default function FTB() {
           sx={{
             display: 'flex',
             flexDirection: 'column',
+            width: '100%',
+            height: '100%',
             marginTop: '16px',
             padding: '16px',
             borderRadius: '15px',
             backgroundColor: 'rgba(15,15,49,0.650)',
+            backgroundRepeat: 'no-repeat',
             alignItems: 'center',
-            backgroundSize: 'cover',
+            backgroundSize: '100% 100%',
             backgroundImage: `url(${BgMedium})`
           }}
         >
@@ -100,7 +96,20 @@ export default function FTB() {
               }}
             >
               <GreenText>我的推荐链接</GreenText>
-              <Typography color={'#FFFFFF'}>XXX人</Typography>
+              <Box display={'flex'}>
+                <Typography color={'white'}>
+                  {account ? shortenText(`https://${window.location.host}/${account}`, 8) : '--'} |
+                </Typography>
+                <Typography
+                  color={isCopied ? '#67768a' : '#84CFFF'}
+                  marginLeft={4}
+                  onClick={() => {
+                    setCopied(`https://${window.location.host}/${account}`)
+                  }}
+                >
+                  复制
+                </Typography>
+              </Box>
             </Box>
             <Box
               sx={{

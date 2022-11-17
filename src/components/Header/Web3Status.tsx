@@ -83,7 +83,7 @@ function Web3StatusInner() {
                 fontSize: { xs: 9, sm: 14 },
                 mr: { xs: 10, sm: 17 },
                 ml: { xs: 10, sm: 20 },
-                color: theme.palette.text.primary
+                color: 'white'
               }}
             >
               {ENSName || shortenAddress(account)}

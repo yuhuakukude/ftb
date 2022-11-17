@@ -3,46 +3,69 @@ import { useShibaContract } from './useContract'
 import { useSingleCallResult } from '../state/multicall/hooks'
 import { CurrencyAmount } from '../constants/token'
 
+function getStringFromBigNumber(resp: any): string {
+  return resp?.result?.[0] ? CurrencyAmount.ether(resp.result?.[0]).toSignificant().toString() : '--'
+}
+
+function getStringFromNumber(resp: any): string {
+  return resp?.result?.[0] ? resp.result?.[0].toString() : '--'
+}
+
 export function useCirculatingSupply(): string {
   const contract = useShibaContract()
   const resp = useSingleCallResult(contract, 'getcirculatingSupply')
-  return resp ? resp.result?.[0].toString() : '--'
+  return getStringFromNumber(resp)
 }
 
 export function useTotalStakedUsdt(): string {
   const contract = useShibaContract()
   const resp = useSingleCallResult(contract, 'totalStakedUsdt')
-  return resp ? resp.result?.[0].toString() : '--'
+  return getStringFromBigNumber(resp)
 }
 
 export function usePendingRewards(): string {
   const { account } = useActiveWeb3React()
   const contract = useShibaContract()
   const resp = useSingleCallResult(contract, 'getPendingRewards', [account ?? undefined])
-  return resp ? resp.result?.[0].toString() : '--'
+  return getStringFromNumber(resp)
 }
 
 export function useEstimateRewards(): string {
   const { account } = useActiveWeb3React()
   const contract = useShibaContract()
   const resp = useSingleCallResult(contract, 'estimateRewards', [account ?? undefined])
-  return resp ? resp.result?.[0].toString() : '--'
+  return getStringFromBigNumber(resp)
 }
 
 export function useCount(): string {
   const contract = useShibaContract()
   const resp = useSingleCallResult(contract, 'count')
-  return resp ? resp.result?.[0].toString() : '--'
+  return getStringFromNumber(resp)
 }
 
 export function useBaseAmount(): string {
   console.log('useBaseAmount')
   const contract = useShibaContract()
   const resp = useSingleCallResult(contract, 'getBaseAmount')
-  console.log(resp)
-  // contract
-  //   ?.getBaseAmount()
-  //   .then((e: any) => console.log(e))
-  //   .catch((e: any) => console.log(e))
-  return resp?.result ? CurrencyAmount.ether(resp.result?.[0]).toString() : '--'
+  return getStringFromBigNumber(resp)
+}
+
+export interface FtbInfo {
+  supply: string
+  staked: string
+  pendingRewards: string
+  estimateRewards: string
+  count: string
+  baseAmount: string
+}
+
+export function useFtbInfo(): FtbInfo {
+  return {
+    supply: useCirculatingSupply(),
+    staked: useTotalStakedUsdt(),
+    pendingRewards: usePendingRewards(),
+    estimateRewards: useEstimateRewards(),
+    count: useCount(),
+    baseAmount: useBaseAmount()
+  }
 }
