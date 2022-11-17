@@ -64,7 +64,7 @@ export default function FTB() {
             justifyContent: 'space-between',
             width: '100%',
             height: '75px',
-            backgroundSize: 'cover',
+            backgroundSize: '100% 100%',
             backgroundImage: `url(${BgShort})`
           }}
         >
@@ -188,7 +188,7 @@ export default function FTB() {
               </Typography>
             </Box>
           </Stack>
-          <Image src={Brands} style={{ width: '280px', height: 'auto', marginTop: '16px' }} />
+          <Image src={Brands} style={{ width: '100%', height: 'auto', marginTop: '16px' }} />
         </Box>
       </>
     </Page>

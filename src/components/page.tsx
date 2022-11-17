@@ -5,7 +5,7 @@ export default function Page({ children }: { children: JSX.Element }) {
   return (
     <Box
       sx={{
-        width: { xs: '100vw' },
+        width: '1200px',
         padding: '0 20px 20px 20px'
       }}
     >
@@ -21,7 +21,7 @@ function ContentView({ children }: { children: JSX.Element }) {
         padding: '18px 15px',
         width: '100%',
         height: '100%',
-        backgroundSize: 'contain',
+        backgroundSize: '100% 100%',
         backgroundRepeat: 'no-repeat',
         backgroundImage: `url(${BgMedium})`
       }}

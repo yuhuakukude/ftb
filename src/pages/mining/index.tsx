@@ -153,7 +153,7 @@ export default function Mining() {
         <Box
           sx={{
             backgroundImage: `url(${MinningBg1})`,
-            backgroundSize: 'cover',
+            backgroundSize: '100% 100%',
             padding: '20px'
           }}
         >
@@ -224,7 +224,7 @@ export default function Mining() {
             flexDirection: 'column',
             alignItems: 'center',
             backgroundImage: `url(${MinningBg2})`,
-            backgroundSize: 'cover',
+            backgroundSize: '100% 100%',
             padding: '10px',
             marginTop: '10px',
             width: '100%',
