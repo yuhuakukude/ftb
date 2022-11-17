@@ -12,6 +12,7 @@ import { useFtbInfo } from '../../hooks/useFtbHomepage'
 import { useActiveWeb3React } from '../../hooks'
 import { shortenText } from '../../utils'
 import useCopyClipboard from '../../hooks/useCopyClipboard'
+import { CurrencyAmount } from '../../constants/token'
 
 export default function FTB() {
   const { supply, staked, count, baseAmount, pendingRewards, estimateRewards } = useFtbInfo()
@@ -33,7 +34,7 @@ export default function FTB() {
               <GreenText>全网质押</GreenText>
             </RowBetween>
             <RowBetween>
-              <SmallText>{supply}</SmallText>
+              <SmallText>{CurrencyAmount.ftb(supply).toFixed(2)}</SmallText>
               <SmallText>{staked}</SmallText>
             </RowBetween>
             <RowBetween>
@@ -49,7 +50,7 @@ export default function FTB() {
               <GreenText>我的产量</GreenText>
             </RowBetween>
             <RowBetween>
-              <SmallText>{pendingRewards}</SmallText>
+              <SmallText>{CurrencyAmount.ftb(pendingRewards).toFixed(2)}</SmallText>
               <SmallText>{estimateRewards}/天</SmallText>
             </RowBetween>
           </>

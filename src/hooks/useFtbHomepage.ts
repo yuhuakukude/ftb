@@ -4,11 +4,11 @@ import { useSingleCallResult } from '../state/multicall/hooks'
 import { CurrencyAmount } from '../constants/token'
 
 function getStringFromBigNumber(resp: any): string {
-  return resp?.result?.[0] ? CurrencyAmount.ether(resp.result?.[0]).toSignificant().toString() : '--'
+  return resp?.result?.[0] ? CurrencyAmount.ether(resp.result?.[0]).toSignificant().toString() : '0'
 }
 
 function getStringFromNumber(resp: any): string {
-  return resp?.result?.[0] ? resp.result?.[0].toString() : '--'
+  return resp?.result?.[0] ? resp.result?.[0].toString() : '0'
 }
 
 export function useCirculatingSupply(): string {
