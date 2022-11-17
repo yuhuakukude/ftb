@@ -201,7 +201,7 @@ export default function Mining() {
             <GreenBtn
               onClick={depositCallback}
               disabled={
-                approvalState !== ApprovalState.APPROVED || (startStakedTime !== 0 && Number(claimedCount) % 10 !== 0)
+                approvalState !== ApprovalState.APPROVED || (startStakedTime !== 0 && Number(claimedCount) % 3 !== 0)
               }
               sx={{ marginLeft: 20 }}
             >
