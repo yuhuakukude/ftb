@@ -78,10 +78,14 @@ export function useUserInfo() {
     startStakedTime: res ? Number(res.startStakedTime) : 0,
     lastClaimedTime: res ? Number(res.lastClaimedTime) : 0,
     claimedAmount: res ? CurrencyAmount.ftb(res.claimedAmount) : undefined,
-    claimedCount: res ? CurrencyAmount.ftb(res.claimedCount) : undefined,
-    subordinatesL1: res ? res.subordinatesL1 + res.subordinatesL2 + res.subordinatesL3 : 0,
+    claimedCount: res ? Number(res.claimedCount) : undefined,
+    subordinates: res ? res.subordinatesL1 + res.subordinatesL2 + res.subordinatesL3 : 0,
     inviter: res ? res.inviter : ZERO_ADDRESS,
-    rewards: rewardsRes?.result ? CurrencyAmount.ftb(rewardsRes?.result?.[0]) : undefined
+    rewards: rewardsRes?.result ? CurrencyAmount.ftb(rewardsRes?.result?.[0]) : undefined,
+    subordinatesL1: res ? res.subordinatesL1.toString() : 0,
+    subordinatesL2: res ? res.subordinatesL1.toString() : 0,
+    subordinatesL3: res ? res.subordinatesL1.toString() : 0,
+    balanceOf: res ? Number(res.balanceOf) : 0
   }
 }
 

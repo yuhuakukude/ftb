@@ -10,14 +10,16 @@ import BgMedium from 'assets/images/background.png'
 import { Box, Stack, Typography } from '@mui/material'
 import { useFtbInfo } from '../../hooks/useFtbHomepage'
 import { useActiveWeb3React } from '../../hooks'
-import { shortenText } from '../../utils'
+import { shortenAddress, shortenText } from '../../utils'
 import useCopyClipboard from '../../hooks/useCopyClipboard'
 import { CurrencyAmount } from '../../constants/token'
+import { useUserInfo } from '../../hooks/useMInt'
 
 export default function FTB() {
   const { supply, staked, count, baseAmount, pendingRewards, estimateRewards } = useFtbInfo()
   const { account } = useActiveWeb3React()
   const [isCopied, setCopied] = useCopyClipboard()
+  const { subordinatesL1, subordinatesL2, subordinatesL3, inviter } = useUserInfo()
   return (
     <Page>
       <>
@@ -119,7 +121,7 @@ export default function FTB() {
               }}
             >
               <GreenText>我的上级</GreenText>
-              <Typography color={'#FFFFFF'}>XXX人</Typography>
+              <Typography color={'#FFFFFF'}>{shortenAddress(inviter)}</Typography>
             </Box>
             <Box
               sx={{
@@ -128,7 +130,7 @@ export default function FTB() {
               }}
             >
               <GreenText>一代</GreenText>
-              <Typography color={'#FFFFFF'}>XXX人</Typography>
+              <Typography color={'#FFFFFF'}>{subordinatesL1}人</Typography>
             </Box>
             <Box
               sx={{
@@ -137,7 +139,7 @@ export default function FTB() {
               }}
             >
               <GreenText>二代</GreenText>
-              <Typography color={'#FFFFFF'}>XXX人</Typography>
+              <Typography color={'#FFFFFF'}>{subordinatesL2}人</Typography>
             </Box>
             <Box
               sx={{
@@ -146,7 +148,7 @@ export default function FTB() {
               }}
             >
               <GreenText>三代</GreenText>
-              <Typography color={'#FFFFFF'}>XXX人</Typography>
+              <Typography color={'#FFFFFF'}>{subordinatesL3}人</Typography>
             </Box>
           </Stack>
         </Box>

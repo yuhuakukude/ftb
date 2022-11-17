@@ -90,13 +90,13 @@ const ProgressText = styled(Typography)`
 `
 
 export default function Mining() {
-  const ROUND_DURING = 12 * 60
-  const CLAIM_DURING = 4 * 60
+  const ROUND_DURING = 10 * 60
+  const CLAIM_DURING = 1 * 60
   const params = useParams()
   const blockNumber = useBlockNumber()
   const { deposit, claim } = useDeposit()
   const { showModal, hideModal } = useModal()
-  const { claimedAmount, rewards, lastClaimedTime, claimedCount, startStakedTime, inviter } = useUserInfo()
+  const { claimedAmount, rewards, lastClaimedTime, claimedCount, startStakedTime, inviter, balanceOf } = useUserInfo()
   const { chainId, account } = useActiveWeb3React()
   const depositAmount = tryParseAmount('10', USDT[chainId ?? 56])
   const [approvalState, approveCallback] = useApproveCallback(depositAmount, FTB_ADDRESS[chainId ?? 56])
@@ -104,6 +104,7 @@ export default function Mining() {
   const { able } = useInviterInfo(params.inviter ?? '')
   const leftTime = toDeltaTimer(startTime ? ROUND_DURING - ((Date.now() / 1000 - startTime) % ROUND_DURING) : 0)
   const ableAddress = inviter !== ZERO_ADDRESS || params.inviter === FIRST_ADDRESS || able
+  console.log('claim count', claimedCount)
   const claimTime = useMemo(() => {
     console.log(blockNumber)
     if (!lastClaimedTime) {
@@ -201,7 +202,7 @@ export default function Mining() {
             <GreenBtn
               onClick={depositCallback}
               disabled={
-                approvalState !== ApprovalState.APPROVED || (startStakedTime !== 0 && Number(claimedCount) % 3 !== 0)
+                approvalState !== ApprovalState.APPROVED || (startStakedTime !== 0 && Number(claimedCount) % 4 !== 0)
               }
               sx={{ marginLeft: 20 }}
             >
@@ -217,7 +218,7 @@ export default function Mining() {
               <ProgressText>剩余 {toDeltaTimer(CLAIM_DURING - Math.min(claimTime, CLAIM_DURING))}</ProgressText>
             </Box>
             <GreenBtn
-              disabled={CLAIM_DURING - Math.min(claimTime, CLAIM_DURING) !== 0}
+              disabled={CLAIM_DURING - Math.min(claimTime, CLAIM_DURING) !== 0 || !balanceOf}
               onClick={claimCallback}
               sx={{ width: 80, height: 30 }}
             >
