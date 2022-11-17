@@ -32,6 +32,21 @@ export default function Progress({ val, total, unit }: { val: number; total: num
   )
 }
 
+const BorderLinearProgress = styled(LinearProgress)(() => ({
+  height: 30,
+  borderRadius: 15,
+  width: '100%',
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    backgroundColor: 'linear-gradient(84deg, #1F6198 0%, #69C05C 46%, #256993 100%)'
+  },
+  [`& .${linearProgressClasses.bar}`]: {
+    borderRadius: 15,
+    borderColor: 'linear-gradient(84deg, #1F6198, #69C05C, #256993) 10 10',
+    border: '2px',
+    backgroundColor: 'linear-gradient(269deg, #256993 0%, #13AAB2 0%, #479D58 100%)'
+  }
+}))
+
 export function SimpleProgress({
   val,
   total,
@@ -45,9 +60,9 @@ export function SimpleProgress({
 }) {
   const value = (val / total) * 100
   return (
-    <Box display="flex" sx={{ width: width ?? 'max-content' }} alignItems="center">
+    <Box display="flex" sx={{ width: width ?? 'max-content', flex: 1 }} alignItems="center">
       {!hideValue && <Typography mr={8}>{value | 0}%</Typography>}
-      <StyledLinearProgress variant="determinate" value={value} sx={{ width: width ?? '100px' }} />
+      <BorderLinearProgress variant="determinate" value={value} sx={{ width: width ?? '100%' }} />
     </Box>
   )
 }

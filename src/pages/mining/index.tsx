@@ -2,46 +2,27 @@ import { Box, Button, styled, Typography } from '@mui/material'
 import Banner from 'assets/images/mining_banner.png'
 import Tx from 'assets/images/tx_4d.png'
 import { GreenText } from '../../components/page'
-import Ball from 'assets/images/football.png'
 import ApproveFtb from 'assets/images/approve_ftb.png'
 import MaxBtn from 'assets/images/max_btn.png'
 import GrayBtn from 'assets/images/gray_btn.png'
-import ReceiveBtn from 'assets/images/receive.png'
 import MinningBg1 from 'assets/images/mining_1.png'
 import MinningBg2 from 'assets/images/mining_2.png'
-import { auto, right } from '@popperjs/core'
+import { auto } from '@popperjs/core'
 import { FTB_ADDRESS, USDT } from '../../constants'
 import { useActiveWeb3React } from '../../hooks'
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import { tryParseAmount } from '../../utils/parseAmount'
 import { useParams } from 'react-router-dom'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import useModal from '../../hooks/useModal'
-import { useDeposit, useDepositInfo } from '../../hooks/useMInt'
+import { useDeposit, useDepositInfo, useUserInfo } from '../../hooks/useMInt'
 import TransactionSubmittedModal from '../../components/Modal/TransactionModals/TransactiontionSubmittedModal'
 import MessageBox from '../../components/Modal/TransactionModals/MessageBox'
 import TransactionPendingModal from 'components/Modal/TransactionModals/TransactionPendingModal'
 import { toDeltaTimer } from '../../components/Timer'
-
-const TimingBgLine = styled('div')`
-  width: 100%;
-  height: 23px;
-  border: 1px solid;
-  background: linear-gradient(rgba(143, 102, 102, 0.5) 0 0) padding-box,
-    linear-gradient(84deg, #1f6198, #69c05c, #256993) border-box;
-  border-radius: 20px;
-  display: flex;
-  padding: 1px;
-  flex-direction: row;
-  align-items: center;
-`
-
-const TimingPass = styled('div')`
-  width: 286px;
-  height: 100%;
-  background: linear-gradient(269deg, #256993 0%, #13aab2 0%, #479d58 100%);
-  border-radius: 20px;
-`
+import { SimpleProgress } from '../../components/Progress'
+import { shortenText } from '../../utils'
+import Copy from '../../components/essential/Copy'
 
 const OptBtn = styled(Button)`
   width: 120px;
@@ -95,18 +76,50 @@ const UstdInput = styled(Box)`
   box-shadow: 0px 7px 13px 0px rgba(0, 0, 0, 0.18), 0px 9px 18px 0px rgba(23, 23, 23, 0.27);
 `
 
+const ProgressText = styled(Typography)`
+  height: 30px;
+  color: #ffffff;
+  position: absolute;
+  font-size: 14px;
+  width: 100%;
+  text-align: right;
+  z-index: 8;
+  top: 0;
+  line-height: 30px;
+  padding-right: 8px;
+`
+
 export default function Mining() {
   const ROUND_DURING = 20 * 60
+  const CLAIM_DURING = 2 * 60
   const params = useParams()
-  const { deposit } = useDeposit()
+  const { deposit, claim } = useDeposit()
   const { showModal, hideModal } = useModal()
-  const { chainId } = useActiveWeb3React()
+  const { claimedAmount, rewards, lastClaimedTime, claimedCount, startStakedTime } = useUserInfo()
+  const { chainId, account } = useActiveWeb3React()
   const depositAmount = tryParseAmount('10', USDT[chainId ?? 56])
   const [approvalState, approveCallback] = useApproveCallback(depositAmount, FTB_ADDRESS[chainId ?? 56])
   const { startTime } = useDepositInfo()
   console.log('startTime', startTime ? ROUND_DURING - ((Date.now() / 1000 - startTime) % ROUND_DURING) : '---')
   const leftTime = toDeltaTimer(startTime ? ROUND_DURING - ((Date.now() / 1000 - startTime) % ROUND_DURING) : 0)
   console.log('leftTime', leftTime)
+  const claimTime = useMemo(() => {
+    if (!lastClaimedTime) {
+      return CLAIM_DURING
+    } else {
+      if (lastClaimedTime === '0') {
+        if (!startStakedTime) {
+          return CLAIM_DURING
+        } else {
+          return Date.now() / 1000 - startStakedTime
+        }
+      } else {
+        return Date.now() / 1000 - lastClaimedTime
+      }
+    }
+  }, [CLAIM_DURING, lastClaimedTime, startStakedTime])
+
+  console.log('claimTime', Number(Date.now()), lastClaimedTime.toString(), claimTime)
   const depositCallback = useCallback(async () => {
     showModal(<TransactionPendingModal />)
     deposit(params?.inviter)
@@ -122,6 +135,21 @@ export default function Mining() {
         console.error(err)
       })
   }, [showModal, deposit, params?.inviter, hideModal])
+  const claimCallback = useCallback(async () => {
+    showModal(<TransactionPendingModal />)
+    claim()
+      .then(() => {
+        hideModal()
+        showModal(<TransactionSubmittedModal />)
+      })
+      .catch((err: any) => {
+        hideModal()
+        showModal(
+          <MessageBox type="error">{err.error && err.error.message ? err.error.message : err?.message}</MessageBox>
+        )
+        console.error(err)
+      })
+  }, [showModal, claim, hideModal])
 
   return (
     <Box
@@ -153,7 +181,7 @@ export default function Mining() {
         <Box
           sx={{
             backgroundImage: `url(${MinningBg1})`,
-            backgroundSize: 'cover',
+            backgroundSize: '100% 100%',
             padding: '20px'
           }}
         >
@@ -171,28 +199,23 @@ export default function Mining() {
             </BlueBtn>
             <GreenBtn
               onClick={depositCallback}
-              disabled={approvalState !== ApprovalState.APPROVED}
+              disabled={approvalState !== ApprovalState.APPROVED || (claimedCount && Number(claimedCount) % 10 === 0)}
               sx={{ marginLeft: 20 }}
             >
               抵押
             </GreenBtn>
           </Box>
           <Typography mt={40} textAlign={'center'} color={'white'}>
-            距离本次挖矿结束9天24时10分23秒
+            距离本次挖矿结束:{leftTime}
           </Typography>
           <Box display={'flex'} alignItems={'center'} marginTop={10}>
-            <TimingBgLine>
-              <TimingPass
-                style={{
-                  width: '60px'
-                }}
-              />
-              <img src={Ball} style={{ height: '100%', width: 'auto', marginLeft: '-15px' }} />
-              <Typography color={'white'} alignSelf={right}>
-                剩余：12h
-              </Typography>
-            </TimingBgLine>
-            <img src={ReceiveBtn} height={23} width={auto} />
+            <Box flex={1} sx={{ position: 'relative' }}>
+              <SimpleProgress width={'100%'} hideValue val={Math.min(claimTime, CLAIM_DURING)} total={CLAIM_DURING} />
+              <ProgressText>剩余</ProgressText>
+            </Box>
+            <GreenBtn onClick={claimCallback} sx={{ width: 80, height: 30 }}>
+              领取
+            </GreenBtn>
           </Box>
           <Box
             sx={{
@@ -201,8 +224,10 @@ export default function Mining() {
               marginTop: '10px'
             }}
           >
-            <Typography color={'white'}>已领取：XXXXFTB</Typography>
-            <Typography color={'white'}>可领取：XXXXFTB</Typography>
+            <Typography color={'white'}>
+              已领取：${claimedAmount ? claimedAmount?.toFixed(2).toString() : '--'}FTB
+            </Typography>
+            <Typography color={'white'}>可领取：{rewards ? rewards?.toFixed(2).toString() : '--'}FTB</Typography>
           </Box>
           <Box
             sx={{
@@ -212,9 +237,11 @@ export default function Mining() {
             }}
           >
             <GreenText>分享邀请链接</GreenText>
-            <Box display={'flex'}>
-              <Typography color={'white'}>https://xxx/xxxxx |</Typography>
-              <Typography color={'#84CFFF'}>复制</Typography>
+            <Box display={'flex'} alignItems={'center'}>
+              <Typography mr={10} color={'white'}>
+                {shortenText('https://' + window.location.host + '/node/' + account, 6)}
+              </Typography>
+              <Copy toCopy={'https://' + window.location.host + '/node/' + account} />
             </Box>
           </Box>
         </Box>
@@ -224,7 +251,7 @@ export default function Mining() {
             flexDirection: 'column',
             alignItems: 'center',
             backgroundImage: `url(${MinningBg2})`,
-            backgroundSize: 'cover',
+            backgroundSize: '100% 100%',
             padding: '10px',
             marginTop: '10px',
             width: '100%',
@@ -264,9 +291,9 @@ export default function Mining() {
                 backgroundSize: 'cover'
               }}
             >
-              <Typography color={'white'} width={'auto'} height={'auto'} marginTop={15}>
+              <GreenBtn onClick={claimCallback} sx={{ width: 80, height: 30 }}>
                 领取
-              </Typography>
+              </GreenBtn>
             </Box>
             <Box
               sx={{
