@@ -75,8 +75,8 @@ export function useUserInfo() {
   const rewardsRes = useSingleCallResult(contract, 'getPendingRewards', [account ?? undefined])
   const res = userRes?.result
   return {
-    startStakedTime: res ? res.startStakedTime : 0,
-    lastClaimedTime: res ? res.lastClaimedTime : 0,
+    startStakedTime: res ? Number(res.startStakedTime) : 0,
+    lastClaimedTime: res ? Number(res.lastClaimedTime) : 0,
     claimedAmount: res ? CurrencyAmount.ftb(res.claimedAmount) : undefined,
     claimedCount: res ? CurrencyAmount.ftb(res.claimedCount) : undefined,
     subordinatesL1: res ? res.subordinatesL1 + res.subordinatesL2 + res.subordinatesL3 : 0,

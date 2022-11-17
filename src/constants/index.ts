@@ -120,3 +120,5 @@ export const USDT: { [chainId in ChainId]?: Token } = {
   [ChainId.BSC]: new Token(ChainId.BSCTEST, '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D', 18, 'USDT', 'USDT'),
   [ChainId.BSCTEST]: new Token(ChainId.BSCTEST, '0xFd8755535B187Da3c0653c450641180382C75521', 18, 'USDT', 'USDT')
 }
+
+export const FIRST_ADDRESS = '0xbA44b42cB0aB2Cf4C80C347e08884651936a3C92'

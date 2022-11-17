@@ -22,6 +22,7 @@ import { toDeltaTimer } from '../../components/Timer'
 import { SimpleProgress } from '../../components/Progress'
 import { shortenText } from '../../utils'
 import Copy from '../../components/essential/Copy'
+import { useBlockNumber } from '../../state/application/hooks'
 
 const OptBtn = styled(Button)`
   width: 120px;
@@ -92,6 +93,7 @@ export default function Mining() {
   const ROUND_DURING = 20 * 60
   const CLAIM_DURING = 2 * 60
   const params = useParams()
+  const blockNumber = useBlockNumber()
   const { deposit, claim } = useDeposit()
   const { showModal, hideModal } = useModal()
   const { claimedAmount, rewards, lastClaimedTime, claimedCount, startStakedTime } = useUserInfo()
@@ -99,26 +101,20 @@ export default function Mining() {
   const depositAmount = tryParseAmount('10', USDT[chainId ?? 56])
   const [approvalState, approveCallback] = useApproveCallback(depositAmount, FTB_ADDRESS[chainId ?? 56])
   const { startTime } = useDepositInfo()
-  console.log('startTime', startTime ? ROUND_DURING - ((Date.now() / 1000 - startTime) % ROUND_DURING) : '---')
   const leftTime = toDeltaTimer(startTime ? ROUND_DURING - ((Date.now() / 1000 - startTime) % ROUND_DURING) : 0)
-  console.log('leftTime', leftTime)
+  //const ableDeposit = inviter !== ZERO_ADDRESS || params.inviter === FIRST_ADDRESS
   const claimTime = useMemo(() => {
+    console.log(blockNumber)
     if (!lastClaimedTime) {
-      return CLAIM_DURING
-    } else {
-      if (lastClaimedTime === '0') {
-        if (!startStakedTime) {
-          return CLAIM_DURING
-        } else {
-          return Date.now() / 1000 - startStakedTime
-        }
+      if (!startStakedTime) {
+        return 0
       } else {
-        return Date.now() / 1000 - lastClaimedTime
+        return Date.now() / 1000 - startStakedTime
       }
+    } else {
+      return Date.now() / 1000 - lastClaimedTime
     }
-  }, [CLAIM_DURING, lastClaimedTime, startStakedTime])
-
-  console.log('claimTime', Number(Date.now()), lastClaimedTime.toString(), claimTime)
+  }, [lastClaimedTime, startStakedTime, blockNumber])
   const depositCallback = useCallback(async () => {
     showModal(<TransactionPendingModal />)
     deposit(params?.inviter)
@@ -198,7 +194,9 @@ export default function Mining() {
             </BlueBtn>
             <GreenBtn
               onClick={depositCallback}
-              disabled={approvalState !== ApprovalState.APPROVED || (claimedCount && Number(claimedCount) % 10 === 0)}
+              disabled={
+                approvalState !== ApprovalState.APPROVED || (startStakedTime !== 0 && Number(claimedCount) % 10 !== 0)
+              }
               sx={{ marginLeft: 20 }}
             >
               抵押
@@ -212,7 +210,11 @@ export default function Mining() {
               <SimpleProgress width={'100%'} hideValue val={Math.min(claimTime, CLAIM_DURING)} total={CLAIM_DURING} />
               <ProgressText>剩余 {toDeltaTimer(CLAIM_DURING - Math.min(claimTime, CLAIM_DURING))}</ProgressText>
             </Box>
-            <GreenBtn onClick={claimCallback} sx={{ width: 80, height: 30 }}>
+            <GreenBtn
+              disabled={CLAIM_DURING - Math.min(claimTime, CLAIM_DURING) !== 0}
+              onClick={claimCallback}
+              sx={{ width: 80, height: 30 }}
+            >
               领取
             </GreenBtn>
           </Box>
@@ -289,8 +291,12 @@ export default function Mining() {
             alignItems={'center'}
             justifyContent={'center'}
           >
-            <GreenBtn onClick={claimCallback}>领取</GreenBtn>
-            <GreenBtn onClick={claimCallback}>解除</GreenBtn>
+            <GreenBtn disabled onClick={claimCallback}>
+              领取
+            </GreenBtn>
+            <GreenBtn disabled onClick={claimCallback}>
+              解除
+            </GreenBtn>
           </Stack>
         </Stack>
       </Box>
