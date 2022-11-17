@@ -32,6 +32,7 @@ export default function Footer() {
         left: '0',
         bottom: '0',
         padding: '4px 40px',
+        backgroundSize: '100% 100%',
         backgroundImage: `url(${FooterBg})`
       }}
     >
