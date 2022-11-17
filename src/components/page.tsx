@@ -5,7 +5,7 @@ export default function Page({ children }: { children: JSX.Element }) {
   return (
     <Box
       sx={{
-        width: { xs: '100%', sm: '1200px' },
+        width: { xs: '100%', sm: '720px' },
         padding: '0 20px 20px 20px'
       }}
     >

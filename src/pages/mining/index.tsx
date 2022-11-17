@@ -23,6 +23,8 @@ import { SimpleProgress } from '../../components/Progress'
 import { shortenText } from '../../utils'
 import Copy from '../../components/essential/Copy'
 import { useBlockNumber } from '../../state/application/hooks'
+import { useTokenBalance } from '../../state/wallet/hooks'
+import { useFtbInfo } from '../../hooks/useFtbHomepage'
 
 const OptBtn = styled(Button)`
   width: 120px;
@@ -82,7 +84,7 @@ const ProgressText = styled(Typography)`
   position: absolute;
   font-size: 14px;
   width: 100%;
-  text-align: right;
+  text-align: center;
   z-index: 8;
   top: 0;
   line-height: 30px;
@@ -101,12 +103,17 @@ export default function Mining() {
   const depositAmount = tryParseAmount('10', USDT[chainId ?? 56])
   const [approvalState, approveCallback] = useApproveCallback(depositAmount, FTB_ADDRESS[chainId ?? 56])
   const { startTime } = useDepositInfo()
+  const { estimateRewards, baseAmount } = useFtbInfo()
   const { able } = useInviterInfo(params.inviter ?? '')
   const leftTime = toDeltaTimer(startTime ? ROUND_DURING - ((Date.now() / 1000 - startTime) % ROUND_DURING) : 0)
   const ableAddress = inviter !== ZERO_ADDRESS || params.inviter === FIRST_ADDRESS || able
+  const usdtBalance = useTokenBalance(account ?? undefined, USDT[chainId ?? 56])
   console.log('claim count', claimedCount)
   const claimTime = useMemo(() => {
     console.log(blockNumber)
+    if (!balanceOf) {
+      return 0
+    }
     if (!lastClaimedTime) {
       if (!startStakedTime) {
         return 0
@@ -116,7 +123,7 @@ export default function Mining() {
     } else {
       return Date.now() / 1000 - lastClaimedTime
     }
-  }, [lastClaimedTime, startStakedTime, blockNumber])
+  }, [blockNumber, balanceOf, lastClaimedTime, startStakedTime])
   const depositCallback = useCallback(async () => {
     showModal(<TransactionPendingModal />)
     deposit(params?.inviter)
@@ -162,7 +169,7 @@ export default function Mining() {
       <img
         src={Banner}
         style={{
-          width: '90%',
+          width: '96%',
           height: 'auto'
         }}
       />
@@ -170,7 +177,7 @@ export default function Mining() {
         sx={{
           display: 'flex',
           padding: '10px',
-          width: '90%',
+          width: '96%',
           justifyContent: 'center',
           flexDirection: 'column'
         }}
@@ -186,6 +193,9 @@ export default function Mining() {
             <img src={Tx} style={{ width: '30px', height: '30px' }} />
             <GreenText>10 USDT</GreenText>
           </UstdInput>
+          <Typography mt={10} textAlign={'right'} width={'100%'} color={'#ffffff'}>
+            余额：{usdtBalance ? usdtBalance?.toFixed(2) : '--'}USDT
+          </Typography>
           {!ableAddress && (
             <Typography mt={20} width={'100%'} textAlign={'center'} color={'red'}>
               邀请链接无效
@@ -201,9 +211,7 @@ export default function Mining() {
             </BlueBtn>
             <GreenBtn
               onClick={depositCallback}
-              disabled={
-                approvalState !== ApprovalState.APPROVED || (startStakedTime !== 0 && Number(claimedCount) % 4 !== 0)
-              }
+              disabled={approvalState !== ApprovalState.APPROVED || !!balanceOf}
               sx={{ marginLeft: 20 }}
             >
               抵押
@@ -225,18 +233,24 @@ export default function Mining() {
               领取
             </GreenBtn>
           </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginTop: '10px'
-            }}
-          >
-            <Typography color={'white'}>
-              已领取：{claimedAmount ? claimedAmount?.toFixed(2).toString() : '--'}FTB
-            </Typography>
-            <Typography color={'white'}>可领取：{rewards ? rewards?.toFixed(2).toString() : '--'}FTB</Typography>
-          </Box>
+          <Stack mt={20} spacing={12}>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography color={'white'}>本轮日产量</Typography>
+              <Typography color={'white'}>{baseAmount}FTB</Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography color={'white'}>预估可领取</Typography>
+              <Typography color={'white'}>{estimateRewards}FTB</Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography color={'white'}>已领取</Typography>
+              <Typography color={'white'}>{claimedAmount ? claimedAmount?.toFixed(2).toString() : '--'}FTB</Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography color={'white'}>可领取</Typography>
+              <Typography color={'white'}>{rewards ? rewards?.toFixed(2).toString() : '--'}FTB</Typography>
+            </Stack>
+          </Stack>
           <Box
             sx={{
               display: 'flex',
