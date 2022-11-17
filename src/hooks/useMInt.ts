@@ -2,7 +2,7 @@ import { useTransactionAdder } from '../state/transactions/hooks'
 import { useShibaContract } from './useContract'
 import { useActiveWeb3React } from './index'
 import { useCallback } from 'react'
-import { calculateGasMargin } from '../utils'
+import { calculateGasMargin, isAddress } from '../utils'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useSingleCallResult } from '../state/multicall/hooks'
 import { CurrencyAmount } from '../constants/token'
@@ -82,5 +82,15 @@ export function useUserInfo() {
     subordinatesL1: res ? res.subordinatesL1 + res.subordinatesL2 + res.subordinatesL3 : 0,
     inviter: res ? res.inviter : ZERO_ADDRESS,
     rewards: rewardsRes?.result ? CurrencyAmount.ftb(rewardsRes?.result?.[0]) : undefined
+  }
+}
+
+export function useInviterInfo(inviter: string) {
+  const contract = useShibaContract()
+  const args = isAddress(inviter) ? inviter : ZERO_ADDRESS
+  const userRes = useSingleCallResult(contract, 'userInfo', [args])
+  const res = userRes?.result
+  return {
+    able: res ? Number(res.startStakedTime) : 0
   }
 }

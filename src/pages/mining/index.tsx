@@ -7,14 +7,14 @@ import MaxBtn from 'assets/images/max_btn.png'
 import MinningBg1 from 'assets/images/mining_1.png'
 import MinningBg2 from 'assets/images/mining_2.png'
 import { auto } from '@popperjs/core'
-import { FTB_ADDRESS, USDT } from '../../constants'
+import { FIRST_ADDRESS, FTB_ADDRESS, USDT, ZERO_ADDRESS } from '../../constants'
 import { useActiveWeb3React } from '../../hooks'
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import { tryParseAmount } from '../../utils/parseAmount'
 import { useParams } from 'react-router-dom'
 import { useCallback, useMemo } from 'react'
 import useModal from '../../hooks/useModal'
-import { useDeposit, useDepositInfo, useUserInfo } from '../../hooks/useMInt'
+import { useDeposit, useDepositInfo, useInviterInfo, useUserInfo } from '../../hooks/useMInt'
 import TransactionSubmittedModal from '../../components/Modal/TransactionModals/TransactiontionSubmittedModal'
 import MessageBox from '../../components/Modal/TransactionModals/MessageBox'
 import TransactionPendingModal from 'components/Modal/TransactionModals/TransactionPendingModal'
@@ -96,13 +96,14 @@ export default function Mining() {
   const blockNumber = useBlockNumber()
   const { deposit, claim } = useDeposit()
   const { showModal, hideModal } = useModal()
-  const { claimedAmount, rewards, lastClaimedTime, claimedCount, startStakedTime } = useUserInfo()
+  const { claimedAmount, rewards, lastClaimedTime, claimedCount, startStakedTime, inviter } = useUserInfo()
   const { chainId, account } = useActiveWeb3React()
   const depositAmount = tryParseAmount('10', USDT[chainId ?? 56])
   const [approvalState, approveCallback] = useApproveCallback(depositAmount, FTB_ADDRESS[chainId ?? 56])
   const { startTime } = useDepositInfo()
+  const { able } = useInviterInfo(params.inviter ?? '')
   const leftTime = toDeltaTimer(startTime ? ROUND_DURING - ((Date.now() / 1000 - startTime) % ROUND_DURING) : 0)
-  //const ableDeposit = inviter !== ZERO_ADDRESS || params.inviter === FIRST_ADDRESS
+  const ableAddress = inviter !== ZERO_ADDRESS || params.inviter === FIRST_ADDRESS || able
   const claimTime = useMemo(() => {
     console.log(blockNumber)
     if (!lastClaimedTime) {
@@ -184,6 +185,11 @@ export default function Mining() {
             <img src={Tx} style={{ width: '30px', height: '30px' }} />
             <GreenText>10 USDT</GreenText>
           </UstdInput>
+          {!ableAddress && (
+            <Typography mt={20} width={'100%'} textAlign={'center'} color={'red'}>
+              邀请链接无效
+            </Typography>
+          )}
           <Box mt={20} display={'flex'} flexDirection={'row'} justifyContent={'center'} sx={{ width: '100%' }}>
             <BlueBtn disabled={approvalState !== ApprovalState.NOT_APPROVED} onClick={approveCallback}>
               {approvalState === ApprovalState.PENDING
