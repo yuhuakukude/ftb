@@ -20,11 +20,12 @@ function ContentView({ children }: { children: JSX.Element }) {
       sx={{
         padding: '18px 15px',
         width: '100%',
-        height: 'auto',
-        backgroundSize: 'cover',
+        height: '100%',
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat',
         backgroundImage: `url(${BgMedium})`
       }}
-      spacing={23}
+      spacing={20}
     >
       {children}
     </Stack>
