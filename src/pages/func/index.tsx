@@ -1,5 +1,5 @@
 import { Box, Stack, styled, Typography } from '@mui/material'
-import { GreenText } from '../../components/page'
+import Page, { GreenText } from '../../components/page'
 import TransBg from 'assets/images/transform_bg.png'
 import FuncBg from 'assets/images/function_main_bg.png'
 import FTBImg from 'assets/images/ftb_img.png'
@@ -58,118 +58,120 @@ export default function Function() {
     '3.参与者可邀请同伴为其加速（最少邀请2人否则不加速），一代加速5%，二代加速3%，三代加速1%'
   ]
   return (
-    <Box
-      sx={{
-        width: '100%',
-        minHeight: '100%',
-        padding: '8px 12px'
-      }}
-    >
+    <Page>
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
           width: '100%',
-          height: '100%',
-          backgroundSize: '100% 100%',
-          padding: '16px',
-          backgroundRepeat: 'no-repeat',
-          backgroundImage: `url(${Bg1})`
+          minHeight: '100%',
+          padding: '8px 12px'
         }}
       >
-        <GreenText>限时免费</GreenText>
-        <GreenText
-          sx={{
-            width: '100%',
-            marginTop: '20px'
-          }}
-        >
-          相同数量
-        </GreenText>
-        <Box display={'flex'} justifyContent={'space-between'} marginTop={10}>
-          <BuyBtn>批量转账(主网币)</BuyBtn>
-          <BuyBtn>批量转账(代币)</BuyBtn>
-        </Box>
-        <GreenText
-          sx={{
-            width: '100%',
-            marginTop: '10px'
-          }}
-        >
-          不同数量
-        </GreenText>
-        <Box display={'flex'} justifyContent={'space-between'} marginTop={10}>
-          <BuyBtn>批量转账(主网币)</BuyBtn>
-          <BuyBtn>批量转账(代币)</BuyBtn>
-        </Box>
-      </Box>
-
-      <Box
-        display={'flex'}
-        flexDirection={'column'}
-        alignItems={'center'}
-        sx={{
-          marginTop: blockMargin,
-          backgroundImage: `url(${FuncBg})`,
-          backgroundSize: '100% 100%',
-          padding: '10px 16px'
-        }}
-      >
-        <ImgWrapper src={FTBImg} />
-        <Typography color={'white'}>代币总量:1000万</Typography>
-        <ImgWrapper src={TitleImg} />
-        <ImgWrapper src={RuleImg} />
         <Box
           sx={{
-            backgroundColor: 'rgba(96,202,59,0.3)',
-            padding: '12px 6px',
-            marginTop: '16px',
-            color: 'white'
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '100%',
+            height: '100%',
+            backgroundSize: '100% 100%',
+            padding: '16px',
+            backgroundRepeat: 'no-repeat',
+            backgroundImage: `url(${Bg1})`
           }}
         >
-          {notices.map((notice, index) => {
-            return <Typography key={index}>{notice}</Typography>
-          })}
+          <GreenText>限时免费</GreenText>
+          <GreenText
+            sx={{
+              width: '100%',
+              marginTop: '20px'
+            }}
+          >
+            相同数量
+          </GreenText>
+          <Box display={'flex'} justifyContent={'space-between'} marginTop={10}>
+            <BuyBtn>批量转账(主网币)</BuyBtn>
+            <BuyBtn>批量转账(代币)</BuyBtn>
+          </Box>
+          <GreenText
+            sx={{
+              width: '100%',
+              marginTop: '10px'
+            }}
+          >
+            不同数量
+          </GreenText>
+          <Box display={'flex'} justifyContent={'space-between'} marginTop={10}>
+            <BuyBtn>批量转账(主网币)</BuyBtn>
+            <BuyBtn>批量转账(代币)</BuyBtn>
+          </Box>
         </Box>
-        <ImgWrapper src={TransBtn} />
-        <Typography color={'white'} sx={{ marginTop: '10px', marginBottom: '10px' }}>
-          {rules.map((rule, index) => {
-            return <Typography key={index}>{rule}</Typography>
-          })}
-        </Typography>
+
+        <Box
+          display={'flex'}
+          flexDirection={'column'}
+          alignItems={'center'}
+          sx={{
+            marginTop: blockMargin,
+            backgroundImage: `url(${FuncBg})`,
+            backgroundSize: '100% 100%',
+            padding: '10px 16px'
+          }}
+        >
+          <ImgWrapper src={FTBImg} />
+          <Typography color={'white'}>代币总量:1000万</Typography>
+          <ImgWrapper src={TitleImg} />
+          <ImgWrapper src={RuleImg} />
+          <Box
+            sx={{
+              backgroundColor: 'rgba(96,202,59,0.3)',
+              padding: '12px 6px',
+              marginTop: '16px',
+              color: 'white'
+            }}
+          >
+            {notices.map((notice, index) => {
+              return <Typography key={index}>{notice}</Typography>
+            })}
+          </Box>
+          <ImgWrapper src={TransBtn} />
+          <Typography color={'white'} sx={{ marginTop: '10px', marginBottom: '10px' }}>
+            {rules.map((rule, index) => {
+              return <Typography key={index}>{rule}</Typography>
+            })}
+          </Typography>
+        </Box>
+        <Box
+          display={'flex'}
+          flexDirection={'column'}
+          alignItems={'center'}
+          marginTop={blockMargin}
+          sx={{
+            backgroundImage: `url(${Bg3})`,
+            padding: '20px 0',
+            backgroundSize: '100% 100%'
+          }}
+        >
+          <GreenText>免费工具</GreenText>
+          <Stack direction={'row'} width={'100%'} justifyContent={'space-evenly'} marginTop={16}>
+            <CenterBox>
+              <IconWrapper src={TransformIcon} />
+              <ToolText>NFT转账(erc721)</ToolText>
+            </CenterBox>
+            <CenterBox>
+              <IconWrapper src={CheckIcon} />
+              <ToolText>代币安全检测(限免)</ToolText>
+            </CenterBox>
+            <CenterBox>
+              <IconWrapper src={ApproveBtn} />
+              <ToolText>授权与查询</ToolText>
+            </CenterBox>
+            <CenterBox>
+              <IconWrapper src={IncomeBtn} />
+              <ToolText>年化收益换算</ToolText>
+            </CenterBox>
+          </Stack>
+        </Box>
       </Box>
-      <Box
-        display={'flex'}
-        flexDirection={'column'}
-        alignItems={'center'}
-        marginTop={blockMargin}
-        sx={{
-          backgroundImage: `url(${Bg3})`,
-          padding: '20px 0',
-          backgroundSize: '100% 100%'
-        }}
-      >
-        <GreenText>免费工具</GreenText>
-        <Stack direction={'row'} width={'100%'} justifyContent={'space-evenly'} marginTop={16}>
-          <CenterBox>
-            <IconWrapper src={TransformIcon} />
-            <ToolText>NFT转账(erc721)</ToolText>
-          </CenterBox>
-          <CenterBox>
-            <IconWrapper src={CheckIcon} />
-            <ToolText>代币安全检测(限免)</ToolText>
-          </CenterBox>
-          <CenterBox>
-            <IconWrapper src={ApproveBtn} />
-            <ToolText>授权与查询</ToolText>
-          </CenterBox>
-          <CenterBox>
-            <IconWrapper src={IncomeBtn} />
-            <ToolText>年化收益换算</ToolText>
-          </CenterBox>
-        </Stack>
-      </Box>
-    </Box>
+    </Page>
   )
 }

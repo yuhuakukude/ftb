@@ -1,7 +1,7 @@
 import { Box, Button, Stack, styled, Typography } from '@mui/material'
 import Banner from 'assets/images/mining_banner.png'
 import Tx from 'assets/images/tx_4d.png'
-import { GreenText } from '../../components/page'
+import Page, { GreenText } from '../../components/page'
 import ApproveFtb from 'assets/images/approve_ftb.png'
 import MaxBtn from 'assets/images/max_btn.png'
 import MinningBg1 from 'assets/images/mining_1.png'
@@ -156,171 +156,175 @@ export default function Mining() {
   }, [showModal, claim, hideModal])
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        padding: '10px',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '100%',
-        height: 'auto'
-      }}
-    >
-      <img
-        src={Banner}
-        style={{
-          width: '96%',
-          height: 'auto'
-        }}
-      />
+    <Page>
       <Box
         sx={{
           display: 'flex',
           padding: '10px',
-          width: '96%',
-          justifyContent: 'center',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          alignItems: 'center',
+          width: '100%',
+          height: 'auto'
         }}
       >
-        <Box
-          sx={{
-            backgroundImage: `url(${MinningBg1})`,
-            backgroundSize: '100% 100%',
-            padding: '20px'
-          }}
-        >
-          <UstdInput>
-            <img src={Tx} style={{ width: '30px', height: '30px' }} />
-            <GreenText>10 USDT</GreenText>
-          </UstdInput>
-          <Typography mt={10} textAlign={'right'} width={'100%'} color={'#ffffff'}>
-            余额：{usdtBalance ? usdtBalance?.toFixed(2) : '--'}USDT
-          </Typography>
-          {!ableAddress && (
-            <Typography mt={20} width={'100%'} textAlign={'center'} color={'red'}>
-              邀请链接无效
-            </Typography>
-          )}
-          <Box mt={20} display={'flex'} flexDirection={'row'} justifyContent={'center'} sx={{ width: '100%' }}>
-            <BlueBtn disabled={approvalState !== ApprovalState.NOT_APPROVED} onClick={approveCallback}>
-              {approvalState === ApprovalState.PENDING
-                ? '授权中'
-                : approvalState === ApprovalState.APPROVED
-                ? '已授权'
-                : '授权'}
-            </BlueBtn>
-            <GreenBtn
-              onClick={depositCallback}
-              disabled={approvalState !== ApprovalState.APPROVED || !!balanceOf}
-              sx={{ marginLeft: 20 }}
-            >
-              抵押
-            </GreenBtn>
-          </Box>
-          <Typography mt={40} textAlign={'center'} color={'white'}>
-            距离本次挖矿结束:{leftTime}
-          </Typography>
-          <Box display={'flex'} alignItems={'center'} marginTop={10}>
-            <Box flex={1} sx={{ position: 'relative' }}>
-              <SimpleProgress width={'100%'} hideValue val={Math.min(claimTime, CLAIM_DURING)} total={CLAIM_DURING} />
-              <ProgressText>剩余 {toDeltaTimer(CLAIM_DURING - Math.min(claimTime, CLAIM_DURING))}</ProgressText>
-            </Box>
-            <GreenBtn
-              disabled={CLAIM_DURING - Math.min(claimTime, CLAIM_DURING) !== 0 || !balanceOf}
-              onClick={claimCallback}
-              sx={{ width: 80, height: 30 }}
-            >
-              领取
-            </GreenBtn>
-          </Box>
-          <Stack mt={20} spacing={12}>
-            <Stack direction={'row'} justifyContent={'space-between'}>
-              <Typography color={'white'}>本轮日产量</Typography>
-              <Typography color={'white'}>{baseAmount}FTB</Typography>
-            </Stack>
-            <Stack direction={'row'} justifyContent={'space-between'}>
-              <Typography color={'white'}>预估可领取</Typography>
-              <Typography color={'white'}>{estimateRewards}FTB</Typography>
-            </Stack>
-            <Stack direction={'row'} justifyContent={'space-between'}>
-              <Typography color={'white'}>已领取</Typography>
-              <Typography color={'white'}>{claimedAmount ? claimedAmount?.toFixed(2).toString() : '--'}FTB</Typography>
-            </Stack>
-            <Stack direction={'row'} justifyContent={'space-between'}>
-              <Typography color={'white'}>可领取</Typography>
-              <Typography color={'white'}>{rewards ? rewards?.toFixed(2).toString() : '--'}FTB</Typography>
-            </Stack>
-          </Stack>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginTop: '20px'
-            }}
-          >
-            <GreenText>分享邀请链接</GreenText>
-            <Box display={'flex'} alignItems={'center'}>
-              <Typography mr={10} color={'white'}>
-                {shortenText('https://' + window.location.host + '/mining/' + account, 6)}
-              </Typography>
-              <Copy toCopy={'https://' + window.location.host + '/mining/' + account} />
-            </Box>
-          </Box>
-        </Box>
-        <Stack
-          spacing={20}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            backgroundImage: `url(${MinningBg2})`,
-            backgroundSize: '100% 100%',
-            padding: '20px',
-            marginTop: '10px',
-            width: '100%',
+        <img
+          src={Banner}
+          style={{
+            width: '96%',
             height: 'auto'
           }}
+        />
+        <Box
+          sx={{
+            display: 'flex',
+            padding: '10px',
+            width: '96%',
+            justifyContent: 'center',
+            flexDirection: 'column'
+          }}
         >
-          <GreenText>质押FTB分红BNB</GreenText>
-          <MyCurrency>
-            <GreenText>分红池</GreenText>
-            <Typography color={'white'}>0.306295 BNB</Typography>
-          </MyCurrency>
-          <MyCurrency>
-            <GreenText>我的质押</GreenText>
-            <Typography color={'white'}>0.00000000 FTB</Typography>
-          </MyCurrency>
-          <MyCurrency>
-            <GreenText>我可分红</GreenText>
-            <Typography color={'white'}>0 BNB</Typography>
-          </MyCurrency>
-          <MyCurrency>
-            <GreenText>已领分红</GreenText>
-            <Typography color={'white'}>0.000000 BNB</Typography>
-          </MyCurrency>
-          <img src={ApproveFtb} style={{ width: '120px', height: 'auto' }} />
-          <EnterFtbBox>
-            <Typography color={'white'}>0 FTB</Typography>
-            <img src={MaxBtn} width={50} height={auto} />
-          </EnterFtbBox>
-          <Stack
-            spacing={60}
-            direction={'row'}
-            width={'100%'}
-            height={'120px'}
-            display={'flex'}
-            alignItems={'center'}
-            justifyContent={'center'}
+          <Box
+            sx={{
+              backgroundImage: `url(${MinningBg1})`,
+              backgroundSize: '100% 100%',
+              padding: '20px'
+            }}
           >
-            <GreenBtn disabled onClick={claimCallback}>
-              领取
-            </GreenBtn>
-            <GreenBtn disabled onClick={claimCallback}>
-              解除
-            </GreenBtn>
+            <UstdInput>
+              <img src={Tx} style={{ width: '30px', height: '30px' }} />
+              <GreenText>10 USDT</GreenText>
+            </UstdInput>
+            <Typography mt={10} textAlign={'right'} width={'100%'} color={'#ffffff'}>
+              余额：{usdtBalance ? usdtBalance?.toFixed(2) : '--'}USDT
+            </Typography>
+            {!ableAddress && (
+              <Typography mt={20} width={'100%'} textAlign={'center'} color={'red'}>
+                邀请链接无效
+              </Typography>
+            )}
+            <Box mt={20} display={'flex'} flexDirection={'row'} justifyContent={'center'} sx={{ width: '100%' }}>
+              <BlueBtn disabled={approvalState !== ApprovalState.NOT_APPROVED} onClick={approveCallback}>
+                {approvalState === ApprovalState.PENDING
+                  ? '授权中'
+                  : approvalState === ApprovalState.APPROVED
+                  ? '已授权'
+                  : '授权'}
+              </BlueBtn>
+              <GreenBtn
+                onClick={depositCallback}
+                disabled={approvalState !== ApprovalState.APPROVED || !!balanceOf}
+                sx={{ marginLeft: 20 }}
+              >
+                抵押
+              </GreenBtn>
+            </Box>
+            <Typography mt={40} textAlign={'center'} color={'white'}>
+              距离本次挖矿结束:{leftTime}
+            </Typography>
+            <Box display={'flex'} alignItems={'center'} marginTop={10}>
+              <Box flex={1} sx={{ position: 'relative' }}>
+                <SimpleProgress width={'100%'} hideValue val={Math.min(claimTime, CLAIM_DURING)} total={CLAIM_DURING} />
+                <ProgressText>剩余 {toDeltaTimer(CLAIM_DURING - Math.min(claimTime, CLAIM_DURING))}</ProgressText>
+              </Box>
+              <GreenBtn
+                disabled={CLAIM_DURING - Math.min(claimTime, CLAIM_DURING) !== 0 || !balanceOf}
+                onClick={claimCallback}
+                sx={{ width: 80, height: 30 }}
+              >
+                领取
+              </GreenBtn>
+            </Box>
+            <Stack mt={20} spacing={12}>
+              <Stack direction={'row'} justifyContent={'space-between'}>
+                <Typography color={'white'}>本轮日产量</Typography>
+                <Typography color={'white'}>{baseAmount}FTB</Typography>
+              </Stack>
+              <Stack direction={'row'} justifyContent={'space-between'}>
+                <Typography color={'white'}>预估可领取</Typography>
+                <Typography color={'white'}>{estimateRewards}FTB</Typography>
+              </Stack>
+              <Stack direction={'row'} justifyContent={'space-between'}>
+                <Typography color={'white'}>已领取</Typography>
+                <Typography color={'white'}>
+                  {claimedAmount ? claimedAmount?.toFixed(2).toString() : '--'}FTB
+                </Typography>
+              </Stack>
+              <Stack direction={'row'} justifyContent={'space-between'}>
+                <Typography color={'white'}>可领取</Typography>
+                <Typography color={'white'}>{rewards ? rewards?.toFixed(2).toString() : '--'}FTB</Typography>
+              </Stack>
+            </Stack>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginTop: '20px'
+              }}
+            >
+              <GreenText>分享邀请链接</GreenText>
+              <Box display={'flex'} alignItems={'center'}>
+                <Typography mr={10} color={'white'}>
+                  {shortenText('https://' + window.location.host + '/mining/' + account, 6)}
+                </Typography>
+                <Copy toCopy={'https://' + window.location.host + '/mining/' + account} />
+              </Box>
+            </Box>
+          </Box>
+          <Stack
+            spacing={20}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              backgroundImage: `url(${MinningBg2})`,
+              backgroundSize: '100% 100%',
+              padding: '20px',
+              marginTop: '10px',
+              width: '100%',
+              height: 'auto'
+            }}
+          >
+            <GreenText>质押FTB分红BNB</GreenText>
+            <MyCurrency>
+              <GreenText>分红池</GreenText>
+              <Typography color={'white'}>0.306295 BNB</Typography>
+            </MyCurrency>
+            <MyCurrency>
+              <GreenText>我的质押</GreenText>
+              <Typography color={'white'}>0.00000000 FTB</Typography>
+            </MyCurrency>
+            <MyCurrency>
+              <GreenText>我可分红</GreenText>
+              <Typography color={'white'}>0 BNB</Typography>
+            </MyCurrency>
+            <MyCurrency>
+              <GreenText>已领分红</GreenText>
+              <Typography color={'white'}>0.000000 BNB</Typography>
+            </MyCurrency>
+            <img src={ApproveFtb} style={{ width: '120px', height: 'auto' }} />
+            <EnterFtbBox>
+              <Typography color={'white'}>0 FTB</Typography>
+              <img src={MaxBtn} width={50} height={auto} />
+            </EnterFtbBox>
+            <Stack
+              spacing={60}
+              direction={'row'}
+              width={'100%'}
+              height={'120px'}
+              display={'flex'}
+              alignItems={'center'}
+              justifyContent={'center'}
+            >
+              <GreenBtn disabled onClick={claimCallback}>
+                领取
+              </GreenBtn>
+              <GreenBtn disabled onClick={claimCallback}>
+                解除
+              </GreenBtn>
+            </Stack>
           </Stack>
-        </Stack>
+        </Box>
       </Box>
-    </Box>
+    </Page>
   )
 }
