@@ -238,9 +238,9 @@ export default function Mining() {
             <GreenText>分享邀请链接</GreenText>
             <Box display={'flex'} alignItems={'center'}>
               <Typography mr={10} color={'white'}>
-                {shortenText('https://' + window.location.host + '/node/' + account, 6)}
+                {shortenText('https://' + window.location.host + '/mining/' + account, 6)}
               </Typography>
-              <Copy toCopy={'https://' + window.location.host + '/node/' + account} />
+              <Copy toCopy={'https://' + window.location.host + '/mining/' + account} />
             </Box>
           </Box>
         </Box>

@@ -98,13 +98,13 @@ export default function FTB() {
               <GreenText>我的推荐链接</GreenText>
               <Box display={'flex'}>
                 <Typography color={'white'}>
-                  {account ? shortenText(`https://${window.location.host}/${account}`, 8) : '--'} |
+                  {account ? shortenText(`https://${window.location.host}/mining/${account}`, 8) : '--'} |
                 </Typography>
                 <Typography
                   color={isCopied ? '#67768a' : '#84CFFF'}
                   marginLeft={4}
                   onClick={() => {
-                    setCopied(`https://${window.location.host}/${account}`)
+                    setCopied(`https://${window.location.host}/mining/${account}`)
                   }}
                 >
                   复制
