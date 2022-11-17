@@ -224,7 +224,7 @@ export default function Mining() {
             }}
           >
             <Typography color={'white'}>
-              已领取：${claimedAmount ? claimedAmount?.toFixed(2).toString() : '--'}FTB
+              已领取：{claimedAmount ? claimedAmount?.toFixed(2).toString() : '--'}FTB
             </Typography>
             <Typography color={'white'}>可领取：{rewards ? rewards?.toFixed(2).toString() : '--'}FTB</Typography>
           </Box>

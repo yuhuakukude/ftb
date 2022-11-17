@@ -36,14 +36,12 @@ const BorderLinearProgress = styled(LinearProgress)(() => ({
   height: 30,
   borderRadius: 15,
   width: '100%',
+  border: '2px solid #69C05C',
   [`&.${linearProgressClasses.colorPrimary}`]: {
-    background: 'linear-gradient(84deg, #1F6198 0%, #69C05C 46%, #256993 100%)'
+    background: 'transparent'
   },
   [`& .${linearProgressClasses.bar}`]: {
-    borderRadius: 15,
-    borderColor: 'linear-gradient(84deg, #1F6198, #69C05C, #256993) 10 10',
-    border: '2px',
-    background: 'linear-gradient(269deg, #256993 0%, #13AAB2 0%, #479D58 100%)'
+    background: 'linear-gradient(84deg, #1F6198 0%, #69C05C 46%, #256993 100%)'
   }
 }))
 
