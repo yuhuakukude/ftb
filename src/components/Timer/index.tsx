@@ -2,9 +2,15 @@ import { useEffect, useState } from 'react'
 
 const formatTime = (d: number, h: number, m: number, s: number) => {
   if (d) {
-    return `${d}d : ${h}h : ${m}m : ${s}s`
+    return `${d}天 : ${h}小时 : ${m}分钟 : ${s}秒`
+  } else if (!d && h) {
+    return `${h}小时 : ${m}分钟 : ${s}秒`
+  } else if (!d && !h && m) {
+    return `${m}分钟 : ${s}秒`
+  } else if (!d && !h && !m && s) {
+    return `${s}秒`
   } else {
-    return `${h}h : ${m}m : ${s}s`
+    return `${s}秒`
   }
 }
 

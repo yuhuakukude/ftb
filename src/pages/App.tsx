@@ -5,7 +5,6 @@ import Header from '../components/Header'
 import Polling from '../components/essential/Polling'
 import Popups from '../components/essential/Popups'
 import Web3ReactManager from '../components/essential/Web3ReactManager'
-import WarningModal from '../components/Modal/WarningModal'
 import { ModalProvider } from 'context/ModalContext'
 import FBT from '../pages/ftb'
 import Footer from './Footer'
@@ -59,7 +58,6 @@ export default function App() {
             <BodyWrapper id="body">
               <Popups />
               <Polling />
-              <WarningModal />
               <Web3ReactManager>
                 <Routes>
                   <Route path="/" element={<FBT />} />
