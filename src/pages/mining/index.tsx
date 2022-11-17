@@ -90,8 +90,8 @@ const ProgressText = styled(Typography)`
 `
 
 export default function Mining() {
-  const ROUND_DURING = 20 * 60
-  const CLAIM_DURING = 2 * 60
+  const ROUND_DURING = 12 * 60
+  const CLAIM_DURING = 4 * 60
   const params = useParams()
   const blockNumber = useBlockNumber()
   const { deposit, claim } = useDeposit()
