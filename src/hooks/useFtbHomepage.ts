@@ -44,5 +44,5 @@ export function useBaseAmount(): string {
   //   ?.getBaseAmount()
   //   .then((e: any) => console.log(e))
   //   .catch((e: any) => console.log(e))
-  return resp ? CurrencyAmount.ether(resp.result?.[0]).toString() : '--'
+  return resp?.result ? CurrencyAmount.ether(resp.result?.[0]).toString() : '--'
 }

@@ -1,18 +1,27 @@
-import { Box, styled, Typography } from '@mui/material'
+import { Box, Button, styled, Typography } from '@mui/material'
 import Banner from 'assets/images/mining_banner.png'
 import Tx from 'assets/images/tx_4d.png'
 import { GreenText } from '../../components/page'
-import BlueApproveBtn from 'assets/images/approve_blue_btn.png'
-import MiningBtn from 'assets/images/mining_btn.png'
 import Ball from 'assets/images/football.png'
 import ApproveFtb from 'assets/images/approve_ftb.png'
 import MaxBtn from 'assets/images/max_btn.png'
-import GreenBtn from 'assets/images/green_btn.png'
 import GrayBtn from 'assets/images/gray_btn.png'
 import ReceiveBtn from 'assets/images/receive.png'
 import MinningBg1 from 'assets/images/mining_1.png'
 import MinningBg2 from 'assets/images/mining_2.png'
 import { auto, right } from '@popperjs/core'
+import { FTB_ADDRESS, USDT } from '../../constants'
+import { useActiveWeb3React } from '../../hooks'
+import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
+import { tryParseAmount } from '../../utils/parseAmount'
+import { useParams } from 'react-router-dom'
+import { useCallback } from 'react'
+import useModal from '../../hooks/useModal'
+import { useDeposit, useDepositInfo } from '../../hooks/useMInt'
+import TransactionSubmittedModal from '../../components/Modal/TransactionModals/TransactiontionSubmittedModal'
+import MessageBox from '../../components/Modal/TransactionModals/MessageBox'
+import TransactionPendingModal from 'components/Modal/TransactionModals/TransactionPendingModal'
+import { toDeltaTimer } from '../../components/Timer'
 
 const TimingBgLine = styled('div')`
   width: 100%;
@@ -34,9 +43,26 @@ const TimingPass = styled('div')`
   border-radius: 20px;
 `
 
-const OptBtn = styled('img')`
+const OptBtn = styled(Button)`
   width: 120px;
-  height: auto;
+  height: 40px;
+  border-radius: 20px;
+  color: #ffffff !important;
+  &:disabled {
+    opacity: 0.5;
+  }
+`
+
+const BlueBtn = styled(OptBtn)`
+  background: linear-gradient(0deg, #2043b3 0%, #55c1ee 100%);
+  border-image: linear-gradient(0deg, #20429e, #afc2ff) 2 2;
+  box-shadow: 0px 13px 31px 1px rgba(69, 93, 171, 0.4), 0px -9px 18px 0px rgba(10, 5, 62, 0.36);
+`
+
+const GreenBtn = styled(OptBtn)`
+  background: linear-gradient(0deg, #0d7225 0%, #88fda1 100%);
+  border-image: linear-gradient(0deg, #176b25, #beffc7) 2 2;
+  box-shadow: 0px 13px 31px 1px rgba(71, 171, 69, 0.4), 0px -9px 18px 0px rgba(5, 62, 10, 0.39);
 `
 
 const MyCurrency = styled(Box)`
@@ -70,6 +96,33 @@ const UstdInput = styled(Box)`
 `
 
 export default function Mining() {
+  const ROUND_DURING = 20 * 60
+  const params = useParams()
+  const { deposit } = useDeposit()
+  const { showModal, hideModal } = useModal()
+  const { chainId } = useActiveWeb3React()
+  const depositAmount = tryParseAmount('10', USDT[chainId ?? 56])
+  const [approvalState, approveCallback] = useApproveCallback(depositAmount, FTB_ADDRESS[chainId ?? 56])
+  const { startTime } = useDepositInfo()
+  console.log('startTime', startTime ? ROUND_DURING - ((Date.now() / 1000 - startTime) % ROUND_DURING) : '---')
+  const leftTime = toDeltaTimer(startTime ? ROUND_DURING - ((Date.now() / 1000 - startTime) % ROUND_DURING) : 0)
+  console.log('leftTime', leftTime)
+  const depositCallback = useCallback(async () => {
+    showModal(<TransactionPendingModal />)
+    deposit(params?.inviter)
+      .then(() => {
+        hideModal()
+        showModal(<TransactionSubmittedModal />)
+      })
+      .catch((err: any) => {
+        hideModal()
+        showModal(
+          <MessageBox type="error">{err.error && err.error.message ? err.error.message : err?.message}</MessageBox>
+        )
+        console.error(err)
+      })
+  }, [showModal, deposit, params?.inviter, hideModal])
+
   return (
     <Box
       sx={{
@@ -101,18 +154,30 @@ export default function Mining() {
           sx={{
             backgroundImage: `url(${MinningBg1})`,
             backgroundSize: 'cover',
-            padding: '10px'
+            padding: '20px'
           }}
         >
           <UstdInput>
             <img src={Tx} style={{ width: '30px', height: '30px' }} />
             <GreenText>10 USDT</GreenText>
           </UstdInput>
-          <Box display={'flex'} flexDirection={'row'} justifyContent={'center'} sx={{ width: '100%' }}>
-            <OptBtn src={BlueApproveBtn} />
-            <OptBtn src={MiningBtn} />
+          <Box mt={20} display={'flex'} flexDirection={'row'} justifyContent={'center'} sx={{ width: '100%' }}>
+            <BlueBtn disabled={approvalState !== ApprovalState.NOT_APPROVED} onClick={approveCallback}>
+              {approvalState === ApprovalState.PENDING
+                ? '授权中'
+                : approvalState === ApprovalState.APPROVED
+                ? '已授权'
+                : '授权'}
+            </BlueBtn>
+            <GreenBtn
+              onClick={depositCallback}
+              disabled={approvalState !== ApprovalState.APPROVED}
+              sx={{ marginLeft: 20 }}
+            >
+              抵押
+            </GreenBtn>
           </Box>
-          <Typography textAlign={'center'} color={'white'}>
+          <Typography mt={40} textAlign={'center'} color={'white'}>
             距离本次挖矿结束9天24时10分23秒
           </Typography>
           <Box display={'flex'} alignItems={'center'} marginTop={10}>

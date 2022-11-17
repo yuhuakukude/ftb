@@ -63,6 +63,7 @@ export default function App() {
                 <Routes>
                   <Route path="/" element={<FBT />} />
                   <Route path="/function" element={<Function />} />
+                  <Route path="/mining/:inviter" element={<Mining />} />
                   <Route path="/mining" element={<Mining />} />
                 </Routes>
               </Web3ReactManager>

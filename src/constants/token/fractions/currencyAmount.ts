@@ -1,5 +1,5 @@
 import { currencyEquals } from '../token'
-import { Currency, ETHER } from '../currency'
+import { Currency, ETHER, FTB, USDT } from '../currency'
 import invariant from 'tiny-invariant'
 import JSBI from 'jsbi'
 import _Big from 'big.js'
@@ -20,6 +20,14 @@ export class CurrencyAmount extends Fraction {
    */
   public static ether(amount: BigintIsh): CurrencyAmount {
     return new CurrencyAmount(ETHER, amount)
+  }
+
+  public static usdt(amount: BigintIsh): CurrencyAmount {
+    return new CurrencyAmount(USDT, amount)
+  }
+
+  public static ftb(amount: BigintIsh): CurrencyAmount {
+    return new CurrencyAmount(FTB, amount)
   }
 
   // amount _must_ be raw, i.e. in the native representation

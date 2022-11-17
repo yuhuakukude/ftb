@@ -115,3 +115,8 @@ export const FTB_ADDRESS: { [chainId in ChainId]?: string } = {
   [ChainId.BSC]: '',
   [ChainId.BSCTEST]: '0x66E465e9D3bA3325C15967c7BB8F8570E1256C01'
 }
+
+export const USDT: { [chainId in ChainId]?: Token } = {
+  [ChainId.BSC]: new Token(ChainId.BSCTEST, '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D', 18, 'USDT', 'USDT'),
+  [ChainId.BSCTEST]: new Token(ChainId.BSCTEST, '0xFd8755535B187Da3c0653c450641180382C75521', 18, 'USDT', 'USDT')
+}

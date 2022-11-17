@@ -17,6 +17,10 @@ export class Currency {
    */
   public static readonly ETHER: Currency = new Currency(18, 'BNB', 'BNB')
 
+  public static readonly USDT: Currency = new Currency(18, 'USDT', 'USDT')
+
+  public static readonly FTB: Currency = new Currency(18, 'FTB', 'FTB')
+
   /**
    * Constructs an instance of the base class `Currency`. The only instance of the base class `Currency` is `Currency.ETHER`.
    * @param decimals decimals of the currency
@@ -33,4 +37,7 @@ export class Currency {
 }
 
 const ETHER = Currency.ETHER
-export { ETHER }
+const USDT = Currency.USDT
+const FTB = Currency.FTB
+
+export { ETHER, USDT, FTB }
