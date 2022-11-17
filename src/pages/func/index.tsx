@@ -10,6 +10,8 @@ import TransformIcon from 'assets/images/transform.png'
 import CheckIcon from 'assets/images/check.png'
 import ApproveBtn from 'assets/images/approve.png'
 import IncomeBtn from 'assets/images/incomes.png'
+import Bg1 from '../../assets/images/func_bg_1.png'
+import Bg3 from '../../assets/images/func_bg_3.png'
 
 const BuyBtn = styled(Typography)`
   background-image: url(${TransBg});
@@ -23,6 +25,7 @@ const BuyBtn = styled(Typography)`
 const ImgWrapper = styled('img')`
   background-size: cover;
   width: 100%;
+  margin: 16px 0;
 `
 
 const IconWrapper = styled('img')`
@@ -33,6 +36,7 @@ const CenterBox = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 `
 const ToolText = styled(Typography)`
   color: white;
@@ -41,6 +45,18 @@ const ToolText = styled(Typography)`
   text-align: center;
 `
 export default function Function() {
+  const blockMargin = '16px'
+  const notices = [
+    '注意：',
+    '1.此代币前10天只能卖不能买，等到第11天开盘后开放交',
+    '易，参与者投资全部进流动池，螺旋上升机制。',
+    '2.卖出30%（每天降低2.5%）最终5%（第十天）'
+  ]
+  const rules = [
+    '1.登录即绑定钱包并生成邀请链接',
+    '2.参与者需支付10u激活账号开始挖矿每天产出1000枚，总计10天10000枚',
+    '3.参与者可邀请同伴为其加速（最少邀请2人否则不加速），一代加速5%，二代加速3%，三代加速1%'
+  ]
   return (
     <Box
       sx={{
@@ -53,7 +69,13 @@ export default function Function() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center'
+          alignItems: 'center',
+          width: '100%',
+          height: '100%',
+          backgroundSize: '100% 100%',
+          padding: '16px',
+          backgroundRepeat: 'no-repeat',
+          backgroundImage: `url(${Bg1})`
         }}
       >
         <GreenText>限时免费</GreenText>
@@ -88,34 +110,48 @@ export default function Function() {
         flexDirection={'column'}
         alignItems={'center'}
         sx={{
+          marginTop: blockMargin,
           backgroundImage: `url(${FuncBg})`,
-          backgroundSize: 'cover',
-          padding: '10px'
+          backgroundSize: '100% 100%',
+          padding: '10px 16px'
         }}
       >
         <ImgWrapper src={FTBImg} />
         <Typography color={'white'}>代币总量:1000万</Typography>
         <ImgWrapper src={TitleImg} />
         <ImgWrapper src={RuleImg} />
-        <Typography
+        <Box
           sx={{
             backgroundColor: 'rgba(96,202,59,0.3)',
             padding: '12px 6px',
-            marginTop: '10px',
+            marginTop: '16px',
             color: 'white'
           }}
         >
-          注意： 1.此代币前10天只能卖不能买，等到第11天开盘后开放交 易，参与者投资全部进流动池，螺旋上升机制。
-          2.卖出30%（
-        </Typography>
+          {notices.map((notice, index) => {
+            return <Typography key={index}>{notice}</Typography>
+          })}
+        </Box>
         <ImgWrapper src={TransBtn} />
-        <Typography color={'white'}>
-          1.登录即绑定钱包并生成邀请链接 2.参与者需支付10u激活账号开始挖矿 每天产出1000枚，总计10天10000枚 3.参与
+        <Typography color={'white'} sx={{ marginTop: '10px', marginBottom: '10px' }}>
+          {rules.map((rule, index) => {
+            return <Typography key={index}>{rule}</Typography>
+          })}
         </Typography>
       </Box>
-      <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
+      <Box
+        display={'flex'}
+        flexDirection={'column'}
+        alignItems={'center'}
+        marginTop={blockMargin}
+        sx={{
+          backgroundImage: `url(${Bg3})`,
+          padding: '20px 0',
+          backgroundSize: '100% 100%'
+        }}
+      >
         <GreenText>免费工具</GreenText>
-        <Stack direction={'row'} width={'100%'} justifyContent={'space-between'}>
+        <Stack direction={'row'} width={'100%'} justifyContent={'space-evenly'} marginTop={16}>
           <CenterBox>
             <IconWrapper src={TransformIcon} />
             <ToolText>NFT转账(erc721)</ToolText>
