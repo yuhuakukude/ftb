@@ -1,10 +1,9 @@
-import { Box, Button, styled, Typography } from '@mui/material'
+import { Box, Button, Stack, styled, Typography } from '@mui/material'
 import Banner from 'assets/images/mining_banner.png'
 import Tx from 'assets/images/tx_4d.png'
 import { GreenText } from '../../components/page'
 import ApproveFtb from 'assets/images/approve_ftb.png'
 import MaxBtn from 'assets/images/max_btn.png'
-import GrayBtn from 'assets/images/gray_btn.png'
 import MinningBg1 from 'assets/images/mining_1.png'
 import MinningBg2 from 'assets/images/mining_2.png'
 import { auto } from '@popperjs/core'
@@ -211,7 +210,7 @@ export default function Mining() {
           <Box display={'flex'} alignItems={'center'} marginTop={10}>
             <Box flex={1} sx={{ position: 'relative' }}>
               <SimpleProgress width={'100%'} hideValue val={Math.min(claimTime, CLAIM_DURING)} total={CLAIM_DURING} />
-              <ProgressText>剩余</ProgressText>
+              <ProgressText>剩余 {toDeltaTimer(CLAIM_DURING - Math.min(claimTime, CLAIM_DURING))}</ProgressText>
             </Box>
             <GreenBtn onClick={claimCallback} sx={{ width: 80, height: 30 }}>
               领取
@@ -245,14 +244,15 @@ export default function Mining() {
             </Box>
           </Box>
         </Box>
-        <Box
+        <Stack
+          spacing={20}
           sx={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             backgroundImage: `url(${MinningBg2})`,
             backgroundSize: '100% 100%',
-            padding: '10px',
+            padding: '20px',
             marginTop: '10px',
             width: '100%',
             height: 'auto'
@@ -280,34 +280,19 @@ export default function Mining() {
             <Typography color={'white'}>0 FTB</Typography>
             <img src={MaxBtn} width={50} height={auto} />
           </EnterFtbBox>
-          <Box width={'100%'} height={'120px'} display={'flex'} alignItems={'center'} justifyContent={'center'}>
-            <Box
-              style={{
-                width: '100px',
-                height: '60px',
-                display: 'flex',
-                backgroundImage: `url(${GreenBtn})`,
-                justifyContent: 'center',
-                backgroundSize: 'cover'
-              }}
-            >
-              <GreenBtn onClick={claimCallback} sx={{ width: 80, height: 30 }}>
-                领取
-              </GreenBtn>
-            </Box>
-            <Box
-              sx={{
-                width: '100px',
-                marginBottom: '10px',
-                height: 'auto',
-                backgroundImage: `url(${GrayBtn})`,
-                backgroundSize: 'cover'
-              }}
-            >
-              <Typography>解除</Typography>
-            </Box>
-          </Box>
-        </Box>
+          <Stack
+            spacing={60}
+            direction={'row'}
+            width={'100%'}
+            height={'120px'}
+            display={'flex'}
+            alignItems={'center'}
+            justifyContent={'center'}
+          >
+            <GreenBtn onClick={claimCallback}>领取</GreenBtn>
+            <GreenBtn onClick={claimCallback}>解除</GreenBtn>
+          </Stack>
+        </Stack>
       </Box>
     </Box>
   )
