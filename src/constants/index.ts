@@ -113,7 +113,7 @@ export const BLOCKED_ADDRESSES: string[] = [
 
 export const FTB_ADDRESS: { [chainId in ChainId]?: string } = {
   [ChainId.BSC]: '',
-  [ChainId.BSCTEST]: '0xCdEaA62Aac7854930d3d4e9291274Bf8E3B89370'
+  [ChainId.BSCTEST]: '0xd20EBFD2326c7a7d0706FFAf5ECD28531842939e'
 }
 
 export const USDT: { [chainId in ChainId]?: Token } = {
