@@ -83,8 +83,8 @@ export function useUserInfo() {
     inviter: res ? res.inviter : ZERO_ADDRESS,
     rewards: rewardsRes?.result ? CurrencyAmount.ftb(rewardsRes?.result?.[0]) : undefined,
     subordinatesL1: res ? res.subordinatesL1.toString() : 0,
-    subordinatesL2: res ? res.subordinatesL1.toString() : 0,
-    subordinatesL3: res ? res.subordinatesL1.toString() : 0,
+    subordinatesL2: res ? res.subordinatesL2.toString() : 0,
+    subordinatesL3: res ? res.subordinatesL3.toString() : 0,
     balanceOf: res ? Number(res.balanceOf) : 0
   }
 }
