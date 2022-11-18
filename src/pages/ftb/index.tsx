@@ -7,11 +7,43 @@ import TwitterLogo from 'assets/images/twitter.png'
 import TeleLogo from 'assets/images/telegram.png'
 import Brands from 'assets/images/brands.png'
 import BgMedium from 'assets/images/background.png'
-import { Box, Stack, Typography } from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, Box, Stack, Typography } from '@mui/material'
 import { useFtbInfo } from '../../hooks/useFtbHomepage'
 import { useActiveWeb3React } from '../../hooks'
 import { shortenText } from '../../utils'
 import useCopyClipboard from '../../hooks/useCopyClipboard'
+
+interface DescInfo {
+  indent: number
+  text: string
+}
+
+const Desc: DescInfo[] = [
+  { indent: 0, text: '币名：Football' },
+  { indent: 0, text: '简称：FTB' },
+  { indent: 0, text: '代币总量：1000万' },
+  { indent: 0, text: '机制：' },
+  { indent: 1, text: '1%销毁' },
+  { indent: 1, text: '2%回流' },
+  { indent: 1, text: '2%营销' },
+  { indent: 0, text: '币量分配：45%产出' },
+  { indent: 1, text: '50%添加资金池 ' },
+  { indent: 1, text: '5%市值钱包（项目方控盘钱包，所有人可查询）' },
+  { indent: 0, text: '注意：' },
+  { indent: 0, text: '1.此代币10天之内只能卖不能买，参与者投资全部进流动池，螺旋上升机制' },
+  { indent: 0, text: '2.卖出30%（每天降低2.5%）最终5%（第11天正式上线买卖税为5%）' },
+  { indent: 0, text: '3.正式上线前20秒杀机器人' },
+  { indent: 0, text: '' },
+  { indent: 0, text: 'DAPP  ' },
+  { indent: 1, text: '1.登录即绑定钱包并生成邀请链接' },
+  { indent: 1, text: '2.参与者需支付10u激活账号开始挖矿，每天产出1000枚，总计10天10000枚' },
+  { indent: 1, text: '3.参与者可邀请同伴为其加速（最少邀请2人，否则不加速），一代加速5%，二代加速3%，三代加速1%' },
+  { indent: 0, text: '举例：' },
+  { indent: 0, text: '邀请2名一代直推，可以获得10%加速，每天产出1100枚' },
+  { indent: 0, text: '邀请3名一代直推，可以获得15%加速，每天产出1150枚' },
+  { indent: 0, text: '邀请4名一代直推，可以获得20%加速，每天产出1200枚' },
+  { indent: 0, text: '以此类推。。。。。' }
+]
 
 export default function FTB() {
   const { supply, staked, count, baseAmount, pendingRewards, estimateRewards } = useFtbInfo()
@@ -54,23 +86,34 @@ export default function FTB() {
             </RowBetween>
           </>
         </ContentView>
-        <Box
+        <Accordion
           sx={{
             padding: '12px',
             marginTop: '16px',
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
             width: '100%',
-            height: '75px',
             backgroundSize: '100% 100%',
-            backgroundImage: `url(${BgShort})`
+            backgroundImage: `url(${BgShort})`,
+            backgroundColor: 'transparent'
           }}
         >
-          <GreenText>项目简介</GreenText>
-          <img style={{ alignSelf: 'right', width: '15px', height: '7px' }} src={Arrow} />
-        </Box>
+          <AccordionSummary
+            expandIcon={<img style={{ alignSelf: 'right', width: '15px', height: '7px' }} src={Arrow} />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <GreenText>项目简介</GreenText>
+          </AccordionSummary>
+          <AccordionDetails sx={{ padding: '0 16px 16px 16px' }}>
+            {Desc.map((desc, index) => {
+              return (
+                <Typography sx={{ textIndent: desc.indent == 1 ? '16px' : '0' }} key={index} color={'white'}>
+                  {desc.text}
+                </Typography>
+              )
+            })}
+          </AccordionDetails>
+        </Accordion>
+
         <Box
           sx={{
             display: 'flex',
