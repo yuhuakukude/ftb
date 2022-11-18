@@ -2,7 +2,7 @@ import { useTransactionAdder } from '../state/transactions/hooks'
 import { useShibaContract } from './useContract'
 import { useActiveWeb3React } from './index'
 import { useCallback } from 'react'
-import { calculateGasMargin } from '../utils'
+import { calculateGasMargin, isAddress } from '../utils'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useSingleCallResult } from '../state/multicall/hooks'
 import { CurrencyAmount } from '../constants/token'
@@ -75,12 +75,26 @@ export function useUserInfo() {
   const rewardsRes = useSingleCallResult(contract, 'getPendingRewards', [account ?? undefined])
   const res = userRes?.result
   return {
-    startStakedTime: res ? res.startStakedTime : 0,
-    lastClaimedTime: res ? res.lastClaimedTime : 0,
+    startStakedTime: res ? Number(res.startStakedTime) : 0,
+    lastClaimedTime: res ? Number(res.lastClaimedTime) : 0,
     claimedAmount: res ? CurrencyAmount.ftb(res.claimedAmount) : undefined,
-    claimedCount: res ? CurrencyAmount.ftb(res.claimedCount) : undefined,
-    subordinatesL1: res ? res.subordinatesL1 + res.subordinatesL2 + res.subordinatesL3 : 0,
+    claimedCount: res ? Number(res.claimedCount) : undefined,
+    subordinates: res ? res.subordinatesL1 + res.subordinatesL2 + res.subordinatesL3 : 0,
     inviter: res ? res.inviter : ZERO_ADDRESS,
-    rewards: rewardsRes?.result ? CurrencyAmount.ftb(rewardsRes?.result?.[0]) : undefined
+    rewards: rewardsRes?.result ? CurrencyAmount.ftb(rewardsRes?.result?.[0]) : undefined,
+    subordinatesL1: res ? res.subordinatesL1.toString() : 0,
+    subordinatesL2: res ? res.subordinatesL1.toString() : 0,
+    subordinatesL3: res ? res.subordinatesL1.toString() : 0,
+    balanceOf: res ? Number(res.balanceOf) : 0
+  }
+}
+
+export function useInviterInfo(inviter: string) {
+  const contract = useShibaContract()
+  const args = isAddress(inviter) ? inviter : ZERO_ADDRESS
+  const userRes = useSingleCallResult(contract, 'userInfo', [args])
+  const res = userRes?.result
+  return {
+    able: res ? Number(res.startStakedTime) : 0
   }
 }

@@ -10,8 +10,10 @@ import BgMedium from 'assets/images/background.png'
 import { Accordion, AccordionDetails, AccordionSummary, Box, Stack, Typography } from '@mui/material'
 import { useFtbInfo } from '../../hooks/useFtbHomepage'
 import { useActiveWeb3React } from '../../hooks'
-import { shortenText } from '../../utils'
+import { shortenAddress, shortenText } from '../../utils'
 import useCopyClipboard from '../../hooks/useCopyClipboard'
+import { CurrencyAmount } from '../../constants/token'
+import { useUserInfo } from '../../hooks/useMInt'
 
 interface DescInfo {
   indent: number
@@ -49,6 +51,7 @@ export default function FTB() {
   const { supply, staked, count, baseAmount, pendingRewards, estimateRewards } = useFtbInfo()
   const { account } = useActiveWeb3React()
   const [isCopied, setCopied] = useCopyClipboard()
+  const { subordinatesL1, subordinatesL2, subordinatesL3, inviter } = useUserInfo()
   return (
     <Page>
       <>
@@ -65,7 +68,7 @@ export default function FTB() {
               <GreenText>全网质押</GreenText>
             </RowBetween>
             <RowBetween>
-              <SmallText>{supply}</SmallText>
+              <SmallText>{CurrencyAmount.ftb(supply).toFixed(2)}</SmallText>
               <SmallText>{staked}</SmallText>
             </RowBetween>
             <RowBetween>
@@ -81,7 +84,7 @@ export default function FTB() {
               <GreenText>我的产量</GreenText>
             </RowBetween>
             <RowBetween>
-              <SmallText>{pendingRewards}</SmallText>
+              <SmallText>{CurrencyAmount.ftb(pendingRewards).toFixed(2)}</SmallText>
               <SmallText>{estimateRewards}/天</SmallText>
             </RowBetween>
           </>
@@ -141,13 +144,13 @@ export default function FTB() {
               <GreenText>我的推荐链接</GreenText>
               <Box display={'flex'}>
                 <Typography color={'white'}>
-                  {account ? shortenText(`https://${window.location.host}/${account}`, 8) : '--'} |
+                  {account ? shortenText(`https://${window.location.host}/mining/${account}`, 8) : '--'} |
                 </Typography>
                 <Typography
                   color={isCopied ? '#67768a' : '#84CFFF'}
                   marginLeft={4}
                   onClick={() => {
-                    setCopied(`https://${window.location.host}/${account}`)
+                    setCopied(`https://${window.location.host}/mining/${account}`)
                   }}
                 >
                   复制
@@ -161,7 +164,7 @@ export default function FTB() {
               }}
             >
               <GreenText>我的上级</GreenText>
-              <Typography color={'#FFFFFF'}>XXX人</Typography>
+              <Typography color={'#FFFFFF'}>{shortenAddress(inviter)}</Typography>
             </Box>
             <Box
               sx={{
@@ -170,7 +173,7 @@ export default function FTB() {
               }}
             >
               <GreenText>一代</GreenText>
-              <Typography color={'#FFFFFF'}>XXX人</Typography>
+              <Typography color={'#FFFFFF'}>{subordinatesL1}人</Typography>
             </Box>
             <Box
               sx={{
@@ -179,7 +182,7 @@ export default function FTB() {
               }}
             >
               <GreenText>二代</GreenText>
-              <Typography color={'#FFFFFF'}>XXX人</Typography>
+              <Typography color={'#FFFFFF'}>{subordinatesL2}人</Typography>
             </Box>
             <Box
               sx={{
@@ -188,7 +191,7 @@ export default function FTB() {
               }}
             >
               <GreenText>三代</GreenText>
-              <Typography color={'#FFFFFF'}>XXX人</Typography>
+              <Typography color={'#FFFFFF'}>{subordinatesL3}人</Typography>
             </Box>
           </Stack>
         </Box>
